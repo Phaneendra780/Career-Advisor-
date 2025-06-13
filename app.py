@@ -195,13 +195,28 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# API Keys - Hardcoded
-TAVILY_API_KEY = "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"
-GOOGLE_API_KEY = "AIzaSyDwfkMVSSm5xUiMLagaE1NdMDLYaBz-9S8"
+# API Keys from Streamlit secrets
+try:
+    TAVILY_API_KEY = st.secrets["TAVILY_API_KEY"]
+    GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
+except KeyError as e:
+    st.error(f"Missing API key in secrets: {e}")
+    st.info("""
+    **Setup Instructions:**
+    
+    1. Create a `.streamlit/secrets.toml` file in your project directory
+    2. Add your API keys:
+    ```
+    TAVILY_API_KEY = "your_tavily_api_key_here"
+    GOOGLE_API_KEY = "your_google_api_key_here"
+    ```
+    3. If deploying to Streamlit Community Cloud, add these secrets in your app settings
+    """)
+    st.stop()
 
 # Check if API keys are available
 if not TAVILY_API_KEY or not GOOGLE_API_KEY:
-    st.error("API keys are missing. Please check your configuration.")
+    st.error("API keys are missing or empty. Please check your secrets configuration.")
     st.stop()
 
 SYSTEM_PROMPT = """
