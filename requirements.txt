@@ -1,6 +1,9 @@
 streamlit>=1.28.0
 pandas>=1.5.0
-google-generativeai>=0.3.0
-requests>=2.25.0
+phidata==2.5.11
+tavily-python==0.3.3
+google-generativeai==0.3.2
+openai>=1.0.0
 reportlab>=4.0.0
 python-dateutil>=2.8.0
+typing-extensions>=4.5.0
