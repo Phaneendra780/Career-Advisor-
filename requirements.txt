@@ -1,6 +1,7 @@
-streamlit>=1.28.0
-pandas>=1.5.0
-phidata>=2.4.0
-google-generativeai>=0.3.0
-reportlab>=4.0.0
-python-dateutil>=2.8.0
+streamlit==1.29.0
+pandas==2.1.4
+phidata==2.4.11
+tavily-python==0.3.3
+google-generativeai==0.3.2
+reportlab==4.0.8
+python-dateutil==2.8.2
