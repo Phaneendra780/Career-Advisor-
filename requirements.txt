@@ -7,3 +7,10 @@ openai>=1.0.0
 reportlab>=4.0.0
 python-dateutil>=2.8.0
 typing-extensions>=4.5.0
+streamlit
+phidata
+google-generativeai
+tavily-python
+pandas
+Pillow
+reportlab
