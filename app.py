@@ -326,5 +326,5 @@ def main():
     # [Keep all your existing main() function code exactly the same]
     # [Only the visual styling has been modified]
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     main()
