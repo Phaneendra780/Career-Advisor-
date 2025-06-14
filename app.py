@@ -18,179 +18,275 @@ import re
 st.set_page_config(
     page_title="Job Matching Tool",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="expanded",  # Changed to make sidebar visible
     page_icon="💼"
 )
 
-# Custom CSS for light theme styling
+# Custom CSS for nude and dark theme styling
 st.markdown("""
 <style>
-    /* Force light theme */
+    /* Main app background - dark nude/taupe */
     .stApp {
-        background-color: #FFFFFF !important;
-        color: #000000 !important;
+        background: linear-gradient(135deg, #2D2520 0%, #3A332B 50%, #2D2520 100%) !important;
+        color: #F5F1EB !important;
     }
     
     /* Main container styling */
     .main .block-container {
-        background-color: #FFFFFF !important;
-        color: #000000 !important;
+        background: linear-gradient(135deg, #2D2520 0%, #3A332B 50%, #2D2520 100%) !important;
+        color: #F5F1EB !important;
+        padding-top: 2rem;
     }
     
+    /* Sidebar styling - visible with nude tones */
+    .css-1d391kg {
+        background: linear-gradient(180deg, #4A3F36 0%, #3A332B 100%) !important;
+    }
+    
+    .css-1y4p8pa {
+        background: linear-gradient(180deg, #4A3F36 0%, #3A332B 100%) !important;
+    }
+    
+    /* Header styling */
     .main-header {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
         font-weight: 700;
-        color: #1E3A8A;
+        color: #E8D5C4;
         text-align: center;
         margin-bottom: 1rem;
         padding-bottom: 1rem;
-        border-bottom: 2px solid #E5E7EB;
+        border-bottom: 2px solid #8B7355;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
+    
     .subheader {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
         font-weight: 600;
-        color: #1E3A8A;
+        color: #D4B896;
         margin-top: 2rem;
         margin-bottom: 1rem;
     }
+    
+    /* Card styling with nude and dark tones */
     .card {
-        background-color: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-radius: 10px;
-        padding: 1.5rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        background: linear-gradient(145deg, #3A332B 0%, #4A3F36 100%);
+        border: 1px solid #6B5B47;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
         margin-bottom: 1.5rem;
-        color: #000000;
+        color: #F5F1EB;
+        backdrop-filter: blur(10px);
     }
+    
+    /* Status boxes with nude palette */
     .success-box {
-        background-color: #D1FAE5;
-        border-left: 5px solid #059669;
-        padding: 1rem;
-        border-radius: 5px;
-        color: #000000;
-    }
-    .warning-box {
-        background-color: #FEF3C7;
-        border-left: 5px solid #D97706;
-        padding: 1rem;
-        border-radius: 5px;
-        color: #000000;
-    }
-    .info-box {
-        background-color: #E0F2FE;
-        border-left: 5px solid #0284C7;
-        padding: 1rem;
-        border-radius: 5px;
-        margin-bottom: 1rem;
-        color: #000000;
-    }
-    .disclaimer-box {
-        background-color: #FEF2F2;
-        border: 1px solid #FECACA;
-        border-left: 5px solid #DC2626;
-        padding: 0.75rem;
-        border-radius: 5px;
-        margin: 0 0 1rem 0;
-        color: #000000;
-    }
-    .stButton>button {
-        background-color: #1E3A8A !important;
-        color: white !important;
-        font-weight: 600;
-        border-radius: 5px;
-        padding: 0.5rem 2rem;
-        width: 100%;
-        border: none;
-    }
-    .stButton>button:hover {
-        background-color: #1E40AF !important;
-    }
-    .input-section {
-        border: 2px solid #E2E8F0;
+        background: linear-gradient(135deg, #8B7355 0%, #A0916B 100%);
+        border-left: 5px solid #D4B896;
+        padding: 1.5rem;
         border-radius: 10px;
+        color: #F5F1EB;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    .warning-box {
+        background: linear-gradient(135deg, #8B6B47 0%, #A67C52 100%);
+        border-left: 5px solid #C4A484;
+        padding: 1.5rem;
+        border-radius: 10px;
+        color: #F5F1EB;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    .info-box {
+        background: linear-gradient(135deg, #6B5B47 0%, #7A6B57 100%);
+        border-left: 5px solid #B8A082;
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        color: #F5F1EB;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    .disclaimer-box {
+        background: linear-gradient(135deg, #5C3D2E 0%, #6B4A3A 100%);
+        border: 1px solid #8B5A3C;
+        border-left: 5px solid #C87941;
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 0 0 1rem 0;
+        color: #F5F1EB;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    /* Button styling with nude tones */
+    .stButton>button {
+        background: linear-gradient(135deg, #8B7355 0%, #A68B5B 100%) !important;
+        color: #F5F1EB !important;
+        font-weight: 600;
+        border-radius: 10px;
+        padding: 0.7rem 2rem;
+        width: 100%;
+        border: 1px solid #B8A082 !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .stButton>button:hover {
+        background: linear-gradient(135deg, #A68B5B 0%, #C4A484 100%) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+    }
+    
+    /* Input section styling */
+    .input-section {
+        border: 2px solid #8B7355;
+        border-radius: 15px;
         padding: 2rem;
         margin-bottom: 2rem;
-        background-color: #FFFFFF;
-        color: #000000;
+        background: linear-gradient(145deg, #3A332B 0%, #4A3F36 100%);
+        color: #F5F1EB;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
+    
     .info-label {
         font-weight: 600;
-        color: #1E3A8A;
+        color: #E8D5C4;
         margin-top: 1rem;
         margin-bottom: 0.5rem;
     }
+    
+    /* Tagline styling */
     .tagline {
         text-align: center;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         font-weight: 600;
-        color: #1E3A8A;
+        color: #F5F1EB;
         margin: 1.5rem auto;
-        padding: 0.75rem;
-        border-radius: 0.5rem;
-        background-color: #EFF6FF;
-        border: 1px solid #DBEAFE;
-        max-width: 400px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        padding: 1rem;
+        border-radius: 15px;
+        background: linear-gradient(135deg, #8B7355 0%, #A68B5B 100%);
+        border: 1px solid #B8A082;
+        max-width: 450px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.3);
     }
+    
     .dark-tagline {
         text-align: center;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         font-weight: 600;
-        color: #FFFFFF;
+        color: #F5F1EB;
         margin: 1.5rem auto;
-        padding: 0.75rem;
-        border-radius: 0.5rem;
-        background-color: #1E3A8A;
-        max-width: 400px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 1rem;
+        border-radius: 15px;
+        background: linear-gradient(135deg, #2D2520 0%, #3A332B 100%);
+        border: 1px solid #6B5B47;
+        max-width: 450px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.3);
     }
     
     /* Force text colors for all elements */
     .stMarkdown, .stText, p, div, span {
-        color: #000000 !important;
+        color: #F5F1EB !important;
     }
     
     /* Text area styling */
     .stTextArea > div > div > textarea {
-        background-color: #FFFFFF !important;
-        color: #000000 !important;
-        border: 2px solid #E2E8F0 !important;
+        background: rgba(58, 51, 43, 0.8) !important;
+        color: #F5F1EB !important;
+        border: 2px solid #8B7355 !important;
+        border-radius: 10px !important;
+    }
+    
+    .stTextArea > div > div > textarea:focus {
+        border: 2px solid #B8A082 !important;
+        box-shadow: 0 0 10px rgba(184, 160, 130, 0.3) !important;
     }
     
     /* Text input styling */
     .stTextInput > div > div > input {
-        background-color: #FFFFFF !important;
-        color: #000000 !important;
-        border: 2px solid #E2E8F0 !important;
+        background: rgba(58, 51, 43, 0.8) !important;
+        color: #F5F1EB !important;
+        border: 2px solid #8B7355 !important;
+        border-radius: 10px !important;
+    }
+    
+    .stTextInput > div > div > input:focus {
+        border: 2px solid #B8A082 !important;
+        box-shadow: 0 0 10px rgba(184, 160, 130, 0.3) !important;
+    }
+    
+    /* Select box styling */
+    .stSelectbox > div > div > select {
+        background: rgba(58, 51, 43, 0.8) !important;
+        color: #F5F1EB !important;
+        border: 2px solid #8B7355 !important;
+        border-radius: 10px !important;
     }
     
     /* Spinner styling */
     .stSpinner > div {
-        color: #1E3A8A !important;
+        color: #D4B896 !important;
     }
     
-    /* Force white background for all containers */
+    /* Container backgrounds */
     [data-testid="stAppViewContainer"] {
-        background-color: #FFFFFF !important;
+        background: linear-gradient(135deg, #2D2520 0%, #3A332B 50%, #2D2520 100%) !important;
     }
     
     [data-testid="stHeader"] {
-        background-color: #FFFFFF !important;
+        background: rgba(45, 37, 32, 0.95) !important;
+        backdrop-filter: blur(10px);
     }
     
     [data-testid="stToolbar"] {
-        background-color: #FFFFFF !important;
+        background: rgba(45, 37, 32, 0.95) !important;
+        backdrop-filter: blur(10px);
+    }
+    
+    /* Sidebar specific styling */
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #4A3F36 0%, #3A332B 100%) !important;
+    }
+    
+    [data-testid="stSidebar"] > div {
+        background: transparent !important;
     }
     
     /* Download button specific styling */
     .stDownloadButton > button {
-        background-color: #047857 !important;
-        color: white !important;
-        border: none !important;
+        background: linear-gradient(135deg, #6B5B47 0%, #8B7355 100%) !important;
+        color: #F5F1EB !important;
+        border: 1px solid #A68B5B !important;
+        border-radius: 10px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
     
     .stDownloadButton > button:hover {
-        background-color: #065F46 !important;
+        background: linear-gradient(135deg, #8B7355 0%, #A68B5B 100%) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+    }
+    
+    /* Metric styling */
+    [data-testid="metric-container"] {
+        background: linear-gradient(145deg, #3A332B 0%, #4A3F36 100%);
+        border: 1px solid #6B5B47;
+        border-radius: 10px;
+        padding: 1rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    /* Labels styling */
+    .stSelectbox label, .stTextInput label, .stTextArea label {
+        color: #E8D5C4 !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Horizontal rule styling */
+    hr {
+        border-color: #8B7355 !important;
+        opacity: 0.3;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -396,7 +492,7 @@ def create_job_report_pdf(analysis_results, user_profile):
         
         # Footer
         content.append(Spacer(1, 0.5*inch))
-        content.append(Paragraph("© 2025 Job Matching Tool | Powered by Gemini AI + Tavily", 
+        content.append(Paragraph("©️ 2025 Job Matching Tool | Powered by Gemini AI + Tavily", 
                                 ParagraphStyle('Footer', parent=styles['Normal'], fontSize=8, textColor=colors.gray)))
         
         # Build PDF
@@ -418,12 +514,30 @@ def main():
     if 'user_profile' not in st.session_state:
         st.session_state.user_profile = {}
 
+    # Sidebar content
+    with st.sidebar:
+        st.markdown("### 🎯 Navigation")
+        st.markdown("---")
+        st.markdown("**Current Features:**")
+        st.markdown("• Job Role Analysis")
+        st.markdown("• Skill Gap Identification")
+        st.markdown("• Company Matching")
+        st.markdown("• Salary Insights")
+        st.markdown("• PDF Report Generation")
+        
+        st.markdown("---")
+        st.markdown("**Tips for Better Results:**")
+        st.markdown("• List specific technical skills")
+        st.markdown("• Include soft skills")
+        st.markdown("• Be specific about location")
+        st.markdown("• Mention certifications")
+
     # Header
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.markdown('<div class="main-header">💼 Job Matching Tool</div>', unsafe_allow_html=True)
         st.markdown("""
-        <div style="text-align: center; margin-bottom: 1rem; color: #4B5563;">
+        <div style="text-align: center; margin-bottom: 1rem; color: #D4B896; font-size: 1.1rem;">
             Enter your skills to discover job opportunities, skill gaps, and salary insights
         </div>
         """, unsafe_allow_html=True)
@@ -434,8 +548,8 @@ def main():
         <div style="display: flex; align-items: flex-start;">
             <span style="font-size: 1.3rem; margin-right: 0.5rem; margin-top: 0.1rem;">💡</span>
             <div>
-                <div style="font-weight: 600; margin-bottom: 0.25rem; color: #DC2626;">CAREER GUIDANCE DISCLAIMER</div>
-                <div style="font-size: 0.9rem; line-height: 1.4; color: #374151;">This tool provides general career guidance based on market data analysis. Job market conditions vary by location and time. Always verify information independently and consider consulting with career professionals for personalized advice.</div>
+                <div style="font-weight: 600; margin-bottom: 0.25rem; color: #E8D5C4;">CAREER GUIDANCE DISCLAIMER</div>
+                <div style="font-size: 0.9rem; line-height: 1.4; color: #F5F1EB;">This tool provides general career guidance based on market data analysis. Job market conditions vary by location and time. Always verify information independently and consider consulting with career professionals for personalized advice.</div>
             </div>
         </div>
     </div>
@@ -543,9 +657,9 @@ def main():
         else:
             st.markdown("""
             <div class="card" style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 400px; text-align: center;">
-                <div style="color: #6B7280; font-size: 4rem; margin-bottom: 1rem;">💼</div>
-                <div style="font-weight: 600; font-size: 1.2rem; color: #1E3A8A; margin-bottom: 0.5rem;">Ready to Find Your Dream Job</div>
-                <div style="color: #374151;">Enter your skills and preferences, then click "Analyze Job Market" to see personalized job recommendations</div>
+                <div style="color: #D4B896; font-size: 4rem; margin-bottom: 1rem;">💼</div>
+                <div style="font-weight: 600; font-size: 1.2rem; color: #E8D5C4; margin-bottom: 0.5rem;">Ready to Find Your Dream Job</div>
+                <div style="color: #F5F1EB;">Enter your skills and preferences, then click "Analyze Job Market" to see personalized job recommendations</div>
             </div>
             """, unsafe_allow_html=True)
     
@@ -593,8 +707,8 @@ def main():
     
     # Footer
     st.markdown("""
-    <div style="text-align: center; margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #E5E7EB; color: #6B7280; font-size: 0.8rem;">
-        © 2025 Job Matching Tool | Powered by Gemini Flash 2 Pro + Tavily | Real-time Job Market Data
+    <div style="text-align: center; margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #8B7355; color: #D4B896; font-size: 0.8rem;">
+        ©️ 2025 Job Matching Tool | Powered by Gemini Flash 2 Pro + Tavily | Real-time Job Market Data
     </div>
     """, unsafe_allow_html=True)
 
