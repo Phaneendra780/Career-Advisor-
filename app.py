@@ -13,6 +13,7 @@ from reportlab.lib.units import inch
 from datetime import datetime
 from io import BytesIO
 import re
+import time
 
 # Set page configuration with custom theme
 st.set_page_config(
@@ -70,7 +71,45 @@ st.markdown("""
         to { opacity: 1; transform: translateY(0); }
     }
     
-    /* Animation Enhancements */
+    /* Enhanced Animations */
+    @keyframes rainbowPulse {
+        0% { box-shadow: 0 0 10px rgba(150, 126, 118, 0.7); }
+        25% { box-shadow: 0 0 15px rgba(150, 100, 118, 0.7); }
+        50% { box-shadow: 0 0 20px rgba(150, 126, 150, 0.7); }
+        75% { box-shadow: 0 0 15px rgba(100, 126, 118, 0.7); }
+        100% { box-shadow: 0 0 10px rgba(150, 126, 118, 0.7); }
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+
+    @keyframes flipInX {
+        from { 
+            transform: perspective(400px) rotateX(90deg);
+            opacity: 0;
+        }
+        to { 
+            transform: perspective(400px) rotateX(0deg);
+            opacity: 1;
+        }
+    }
+
+    @keyframes tada {
+        0% { transform: scale(1); }
+        10%, 20% { transform: scale(0.9) rotate(-3deg); }
+        30%, 50%, 70%, 90% { transform: scale(1.1) rotate(3deg); }
+        40%, 60%, 80% { transform: scale(1.1) rotate(-3deg); }
+        100% { transform: scale(1) rotate(0); }
+    }
+
     @keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
@@ -93,6 +132,11 @@ st.markdown("""
         100% { transform: translateY(0px); }
     }
     
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
     /* Header styling */
     .main-header {
         font-size: 3rem !important;
@@ -101,7 +145,7 @@ st.markdown("""
         text-align: center !important;
         margin-bottom: 1rem !important;
         letter-spacing: -0.5px;
-        animation: fadeIn 1s ease-out, slideInFromBottom 0.8s ease-out;
+        animation: flipInX 1s ease-out, float 4s ease-in-out infinite !important;
     }
     
     .subtitle {
@@ -154,7 +198,7 @@ st.markdown("""
         background: var(--text-light) !important;
         border: 1px solid var(--secondary-nude) !important;
         max-width: 500px !important;
-        animation: fadeIn 1s ease-out, float 3s ease-in-out infinite;
+        animation: fadeIn 1s ease-out, bounce 3s infinite !important;
     }
     
     .dark-tagline {
@@ -167,7 +211,7 @@ st.markdown("""
         border-radius: 8px !important;
         background: var(--accent-nude) !important;
         max-width: 500px !important;
-        animation: fadeIn 1s ease-out, float 3s ease-in-out infinite;
+        animation: fadeIn 1s ease-out, bounce 3s infinite !important;
     }
     
     /* Button styling */
@@ -185,7 +229,7 @@ st.markdown("""
     .stButton > button:hover {
         background: var(--dark-nude) !important;
         box-shadow: var(--shadow-medium) !important;
-        animation: pulse 1.5s infinite;
+        animation: rainbowPulse 2s infinite, tada 1s !important;
     }
     
     /* Feature box styling */
@@ -201,10 +245,8 @@ st.markdown("""
     }
     
     .feature-box:hover {
-        transform: translateY(-5px) !important;
-        box-shadow: var(--shadow-medium) !important;
-        border-color: var(--accent-nude) !important;
-        animation: pulse 2s infinite;
+        animation: pulse 1s infinite, rainbowPulse 3s infinite !important;
+        transform: scale(1.03) !important;
         box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
     }
     
@@ -236,7 +278,7 @@ st.markdown("""
         padding: 2rem !important;
         box-shadow: var(--shadow-light) !important;
         min-height: 400px !important;
-        transition: all 0.5s ease;
+        animation: fadeIn 0.8s ease-out, slideInFromBottom 0.6s ease-out !important;
     }
     
     .info-label {
@@ -269,6 +311,8 @@ st.markdown("""
         border-color: var(--accent-nude) !important;
         box-shadow: 0 0 0 2px rgba(150, 126, 118, 0.1) !important;
         transform: scale(1.01);
+        animation: rainbowPulse 3s infinite !important;
+        border-width: 2px !important;
     }
     
     .stTextArea > div > div > textarea::placeholder,
@@ -315,7 +359,7 @@ st.markdown("""
         font-size: 4rem !important;
         margin-bottom: 1rem !important;
         color: var(--secondary-nude) !important;
-        animation: float 3s ease-in-out infinite;
+        animation: bounce 2s infinite, spin 4s linear infinite !important;
     }
     
     .placeholder-title {
@@ -333,11 +377,6 @@ st.markdown("""
     }
     
     /* Loading animation */
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-    
     .loading-spinner {
         animation: spin 1s linear infinite;
         width: 30px;
@@ -346,6 +385,23 @@ st.markdown("""
         border-top: 4px solid transparent;
         border-radius: 50%;
         margin: 20px auto;
+    }
+    
+    /* Animated download button */
+    .stDownloadButton > button {
+        transition: all 0.3s !important;
+    }
+    
+    .stDownloadButton > button:hover {
+        animation: rainbowPulse 1.5s infinite !important;
+        transform: scale(1.05) !important;
+    }
+
+    /* Animated success message */
+    .success-message {
+        animation: bounce 0.6s, fadeIn 0.5s !important;
+        color: var(--accent-nude) !important;
+        font-weight: 600 !important;
     }
     
     /* Footer styling */
@@ -364,6 +420,7 @@ st.markdown("""
     @media (max-width: 768px) {
         .main-header {
             font-size: 2.2rem !important;
+            animation: fadeIn 1s ease-out !important;
         }
         
         .glass-card, .input-section, .results-card {
@@ -503,13 +560,29 @@ def analyze_job_match(skills, experience_level, preferred_location, career_goals
             <div style="text-align: center; padding: 2rem;">
                 <div class="loading-spinner"></div>
                 <div style="margin-top: 1rem; font-size: 1.1rem; color: var(--accent-nude);">
-                    Analyzing job market and matching opportunities...
+                    <span style="display: inline-block; animation: shake 0.5s infinite;">🔍</span> 
+                    Analyzing job market opportunities...
                 </div>
             </div>
             """, unsafe_allow_html=True)
             
             response = agent.run(query)
             loading_container.empty()
+            
+            # Show success animation
+            success_container = st.empty()
+            with success_container.container():
+                st.markdown("""
+                <div class="success-message" style="text-align: center; margin: 1rem 0; font-size: 1.2rem;">
+                    ✓ Analysis complete! Here are your results
+                </div>
+                """, unsafe_allow_html=True)
+                st.balloons()
+            
+            # Remove success message after delay
+            time.sleep(2)
+            success_container.empty()
+            
             return response.content.strip()
     except Exception as e:
         st.error(f"Error analyzing job match: {e}")
@@ -705,9 +778,9 @@ def main():
     if st.session_state.analysis_results:
         st.markdown('<div class="results-card">', unsafe_allow_html=True)
         st.markdown("""
-        <div style="font-size: 1.8rem; font-weight: 700; color: var(--accent-nude); margin-bottom: 1.5rem; text-align: center; 
-                    animation: fadeIn 0.8s ease-out, slideInFromBottom 0.6s ease-out;">
-            ✨ Your Job Market Analysis
+        <div style="font-size: 1.8rem; font-weight: 700; color: var(--accent-nude); margin-bottom: 1.5rem; 
+                    text-align: center; animation: flipInX 0.8s ease-out;">
+            <span style="display: inline-block; animation: tada 1s 1;">✨</span> Your Job Market Analysis
         </div>
         """, unsafe_allow_html=True)
         
