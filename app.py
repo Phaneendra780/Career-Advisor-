@@ -22,7 +22,7 @@ st.set_page_config(
     page_icon="🚀"
 )
 
-# Nude and professional CSS with modern design
+# Enhanced CSS with animations
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -70,6 +70,29 @@ st.markdown("""
         to { opacity: 1; transform: translateY(0); }
     }
     
+    /* Animation Enhancements */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes slideInFromBottom {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+        100% { transform: scale(1); }
+    }
+    
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-5px); }
+        100% { transform: translateY(0px); }
+    }
+    
     /* Header styling */
     .main-header {
         font-size: 3rem !important;
@@ -78,6 +101,7 @@ st.markdown("""
         text-align: center !important;
         margin-bottom: 1rem !important;
         letter-spacing: -0.5px;
+        animation: fadeIn 1s ease-out, slideInFromBottom 0.8s ease-out;
     }
     
     .subtitle {
@@ -87,6 +111,7 @@ st.markdown("""
         color: var(--text-dark);
         margin-bottom: 2rem;
         opacity: 0.9;
+        animation: fadeIn 1.2s ease-out;
     }
     
     /* Card styling */
@@ -114,6 +139,7 @@ st.markdown("""
         padding: 2rem !important;
         margin-bottom: 2rem !important;
         box-shadow: var(--shadow-light) !important;
+        animation: fadeIn 1.4s ease-out;
     }
     
     /* Tagline styling */
@@ -128,6 +154,7 @@ st.markdown("""
         background: var(--text-light) !important;
         border: 1px solid var(--secondary-nude) !important;
         max-width: 500px !important;
+        animation: fadeIn 1s ease-out, float 3s ease-in-out infinite;
     }
     
     .dark-tagline {
@@ -140,6 +167,7 @@ st.markdown("""
         border-radius: 8px !important;
         background: var(--accent-nude) !important;
         max-width: 500px !important;
+        animation: fadeIn 1s ease-out, float 3s ease-in-out infinite;
     }
     
     /* Button styling */
@@ -151,12 +179,13 @@ st.markdown("""
         border-radius: 8px !important;
         padding: 0.7rem 1.5rem !important;
         border: none !important;
-        transition: all 0.3s ease !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
     
     .stButton > button:hover {
         background: var(--dark-nude) !important;
         box-shadow: var(--shadow-medium) !important;
+        animation: pulse 1.5s infinite;
     }
     
     /* Feature box styling */
@@ -166,14 +195,17 @@ st.markdown("""
         border: 1px solid var(--secondary-nude) !important;
         padding: 1.5rem !important;
         text-align: center !important;
-        transition: all 0.3s ease !important;
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
         height: 100% !important;
+        animation: fadeIn 1s ease-out;
     }
     
     .feature-box:hover {
         transform: translateY(-5px) !important;
         box-shadow: var(--shadow-medium) !important;
         border-color: var(--accent-nude) !important;
+        animation: pulse 2s infinite;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
     }
     
     .feature-icon {
@@ -204,6 +236,7 @@ st.markdown("""
         padding: 2rem !important;
         box-shadow: var(--shadow-light) !important;
         min-height: 400px !important;
+        transition: all 0.5s ease;
     }
     
     .info-label {
@@ -227,6 +260,7 @@ st.markdown("""
         color: var(--text-dark) !important;
         border: 1px solid var(--secondary-nude) !important;
         border-radius: 8px !important;
+        transition: all 0.3s ease !important;
     }
     
     .stTextArea > div > div > textarea:focus,
@@ -234,6 +268,7 @@ st.markdown("""
     .stSelectbox > div > div > select:focus {
         border-color: var(--accent-nude) !important;
         box-shadow: 0 0 0 2px rgba(150, 126, 118, 0.1) !important;
+        transform: scale(1.01);
     }
     
     .stTextArea > div > div > textarea::placeholder,
@@ -259,6 +294,7 @@ st.markdown("""
         padding: 1rem !important;
         margin: 1rem 0 !important;
         color: var(--text-dark) !important;
+        animation: fadeIn 1s ease-out;
     }
     
     /* Placeholder content styling */
@@ -272,12 +308,14 @@ st.markdown("""
         background: var(--text-light) !important;
         border-radius: 12px !important;
         border: 2px dashed var(--secondary-nude) !important;
+        animation: fadeIn 1s ease-out;
     }
     
     .placeholder-icon {
         font-size: 4rem !important;
         margin-bottom: 1rem !important;
         color: var(--secondary-nude) !important;
+        animation: float 3s ease-in-out infinite;
     }
     
     .placeholder-title {
@@ -294,6 +332,22 @@ st.markdown("""
         opacity: 0.7;
     }
     
+    /* Loading animation */
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    .loading-spinner {
+        animation: spin 1s linear infinite;
+        width: 30px;
+        height: 30px;
+        border: 4px solid var(--accent-nude);
+        border-top: 4px solid transparent;
+        border-radius: 50%;
+        margin: 20px auto;
+    }
+    
     /* Footer styling */
     .footer {
         text-align: center !important;
@@ -303,6 +357,7 @@ st.markdown("""
         color: var(--text-dark) !important;
         font-size: 0.85rem !important;
         opacity: 0.8;
+        animation: fadeIn 1.5s ease-out;
     }
     
     /* Responsive design */
@@ -317,6 +372,15 @@ st.markdown("""
         
         .feature-box {
             margin-bottom: 1rem !important;
+        }
+        
+        .feature-box:hover {
+            animation: none !important;
+            transform: none !important;
+        }
+        
+        .tagline, .dark-tagline {
+            animation: fadeIn 1s ease-out !important;
         }
     }
 </style>
@@ -432,8 +496,20 @@ def analyze_job_match(skills, experience_level, preferred_location, career_goals
         Use current market data from job portals, company websites, and industry reports.
         """
         
-        with st.spinner("🔍 Analyzing job market and matching opportunities..."):
+        # Create a custom loading container
+        loading_container = st.empty()
+        with loading_container.container():
+            st.markdown("""
+            <div style="text-align: center; padding: 2rem;">
+                <div class="loading-spinner"></div>
+                <div style="margin-top: 1rem; font-size: 1.1rem; color: var(--accent-nude);">
+                    Analyzing job market and matching opportunities...
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
             response = agent.run(query)
+            loading_container.empty()
             return response.content.strip()
     except Exception as e:
         st.error(f"Error analyzing job match: {e}")
@@ -628,7 +704,12 @@ def main():
     # Display results if available
     if st.session_state.analysis_results:
         st.markdown('<div class="results-card">', unsafe_allow_html=True)
-        st.markdown('<div style="font-size: 1.8rem; font-weight: 700; color: var(--accent-nude); margin-bottom: 1.5rem; text-align: center;">✨ Your Job Market Analysis</div>', unsafe_allow_html=True)
+        st.markdown("""
+        <div style="font-size: 1.8rem; font-weight: 700; color: var(--accent-nude); margin-bottom: 1.5rem; text-align: center; 
+                    animation: fadeIn 0.8s ease-out, slideInFromBottom 0.6s ease-out;">
+            ✨ Your Job Market Analysis
+        </div>
+        """, unsafe_allow_html=True)
         
         # Format the analysis results with better styling
         formatted_info = st.session_state.analysis_results.replace(
