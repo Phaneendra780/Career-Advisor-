@@ -13,6 +13,7 @@ from reportlab.lib.units import inch
 from datetime import datetime
 from io import BytesIO
 import re
+import time
 
 # Set page configuration with custom theme
 st.set_page_config(
@@ -22,7 +23,7 @@ st.set_page_config(
     page_icon="🚀"
 )
 
-# Nude and professional CSS with modern design
+# Enhanced CSS with animated background
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -42,15 +43,49 @@ st.markdown("""
         --shadow-heavy: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     }
     
-    /* Global styles */
-    * {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    /* Main app styling with animated background */
+    .stApp {
+        background: linear-gradient(-45deg, #F5EFE6, #E8DFCA, #D8C4B6, #967E76);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+        min-height: 100vh;
     }
     
-    /* Main app styling */
-    .stApp {
-        background: var(--primary-nude) !important;
-        min-height: 100vh;
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    /* Floating particles background */
+    .particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+    }
+    
+    .particle {
+        position: absolute;
+        background: rgba(150, 126, 118, 0.2);
+        border-radius: 50%;
+        animation: floatParticle linear infinite;
+    }
+    
+    @keyframes floatParticle {
+        0% { 
+            transform: translateY(0) translateX(0);
+            opacity: 0;
+        }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { 
+            transform: translateY(-100vh) translateX(100px);
+            opacity: 0;
+        }
     }
     
     /* Container styling with professional look */
@@ -78,6 +113,7 @@ st.markdown("""
         text-align: center !important;
         margin-bottom: 1rem !important;
         letter-spacing: -0.5px;
+        animation: fadeIn 1s ease-out;
     }
     
     .subtitle {
@@ -87,6 +123,7 @@ st.markdown("""
         color: var(--text-dark);
         margin-bottom: 2rem;
         opacity: 0.9;
+        animation: fadeIn 1.2s ease-out;
     }
     
     /* Card styling */
@@ -114,6 +151,7 @@ st.markdown("""
         padding: 2rem !important;
         margin-bottom: 2rem !important;
         box-shadow: var(--shadow-light) !important;
+        animation: fadeIn 1.4s ease-out;
     }
     
     /* Tagline styling */
@@ -294,6 +332,22 @@ st.markdown("""
         opacity: 0.7;
     }
     
+    /* Loading animation */
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    .loading-spinner {
+        animation: spin 1s linear infinite;
+        width: 30px;
+        height: 30px;
+        border: 4px solid var(--accent-nude);
+        border-top: 4px solid transparent;
+        border-radius: 50%;
+        margin: 20px auto;
+    }
+    
     /* Footer styling */
     .footer {
         text-align: center !important;
@@ -314,8 +368,47 @@ st.markdown("""
         .glass-card, .input-section, .results-card {
             padding: 1.5rem !important;
         }
+        
+        .feature-box {
+            margin-bottom: 1rem !important;
+        }
     }
 </style>
+""", unsafe_allow_html=True)
+
+# Add floating particles to background
+st.markdown("""
+<div class="particles" id="particles-js"></div>
+<script>
+    // Create floating particles
+    document.addEventListener('DOMContentLoaded', function() {
+        const particles = document.querySelector('.particles');
+        const colors = ['#F5EFE6', '#E8DFCA', '#D8C4B6', '#967E76'];
+        
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Random properties
+            const size = Math.random() * 15 + 5;
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100 + 100;
+            const duration = Math.random() * 20 + 10;
+            const delay = Math.random() * 5;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${posX}%`;
+            particle.style.top = `${posY}%`;
+            particle.style.animationDuration = `${duration}s`;
+            particle.style.animationDelay = `${delay}s`;
+            particle.style.backgroundColor = color;
+            
+            particles.appendChild(particle);
+        }
+    });
+</script>
 """, unsafe_allow_html=True)
 
 # API Keys from Streamlit secrets
@@ -542,14 +635,12 @@ def main():
         st.session_state.user_profile = {}
 
     # Header
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.markdown('<div class="main-header">🚀 AI Job Matcher</div>', unsafe_allow_html=True)
-        st.markdown("""
-        <div class="subtitle">
-            Discover your perfect career path with AI-powered job matching
-        </div>
-        """, unsafe_allow_html=True)
+    st.markdown('<div class="main-header">🚀 AI Job Matcher</div>', unsafe_allow_html=True)
+    st.markdown("""
+    <div class="subtitle">
+        Discover your perfect career path with AI-powered job matching
+    </div>
+    """, unsafe_allow_html=True)
     
     # Disclaimer
     st.markdown("""
@@ -564,113 +655,108 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # Main content in two-column layout
-    col1, col2 = st.columns([1, 1], gap="large")
+    # Input Section
+    st.markdown('<div class="tagline">🎯 Transform your skills into opportunities!</div>', unsafe_allow_html=True)
     
-    with col1:
-        # Tagline above the input section
-        st.markdown('<div class="tagline">🎯 Transform your skills into opportunities!</div>', unsafe_allow_html=True)
-        
-        st.markdown('<div class="input-section">', unsafe_allow_html=True)
-        
-        # Skills input
-        skills = st.text_area(
-            "🛠️ Your Skills",
-            placeholder="e.g., Python, JavaScript, React, SQL, Machine Learning, Project Management, Data Analysis...",
-            height=100,
-            help="List all your technical and soft skills separated by commas"
-        )
-        
-        # Experience level
-        experience_level = st.selectbox(
-            "📊 Experience Level",
-            ["Entry Level (0-2 years)", "Mid Level (2-5 years)", "Senior Level (5-10 years)", "Expert Level (10+ years)"],
-            help="Select your current experience level"
-        )
-        
-        # Preferred location
-        preferred_location = st.text_input(
-            "📍 Preferred Job Location",
-            placeholder="e.g., New York, Remote, San Francisco, London...",
-            help="Enter your preferred work location or 'Remote' for remote work"
-        )
-        
-        # Career goals
-        career_goals = st.text_area(
-            "🎯 Career Goals (Optional)",
-            placeholder="e.g., Become a Senior Software Engineer, Transition to Data Science, Start in Product Management...",
-            height=80,
-            help="Describe your career aspirations and goals"
-        )
-        
-        # Analyze button
-        if st.button("🔍 Analyze Job Market", key="analyze_btn"):
-            if skills.strip():
-                st.session_state.analyze_clicked = True
-                
-                # Store user profile
-                st.session_state.user_profile = {
-                    "Skills": skills,
-                    "Experience Level": experience_level,
-                    "Preferred Location": preferred_location,
-                    "Career Goals": career_goals
-                }
-                
-                # Perform analysis
-                analysis_result = analyze_job_match(skills, experience_level, preferred_location, career_goals)
-                st.session_state.analysis_results = analysis_result
-            else:
-                st.error("Please enter your skills to proceed with the analysis.")
-        
-        st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<div class="input-section">', unsafe_allow_html=True)
     
-    with col2:
-        # Tagline above the results section
-        st.markdown('<div class="dark-tagline">📊 Your career roadmap awaits!</div>', unsafe_allow_html=True)
-        
-        # Display results if available
-        if st.session_state.analysis_results:
-            st.markdown('<div class="results-card">', unsafe_allow_html=True)
-            st.markdown('<div style="font-size: 1.8rem; font-weight: 700; color: var(--accent-nude); margin-bottom: 1.5rem; text-align: center;">✨ Your Job Market Analysis</div>', unsafe_allow_html=True)
+    # Skills input
+    skills = st.text_area(
+        "🛠️ Your Skills",
+        placeholder="e.g., Python, JavaScript, React, SQL, Machine Learning, Project Management, Data Analysis...",
+        height=100,
+        help="List all your technical and soft skills separated by commas"
+    )
+    
+    # Experience level
+    experience_level = st.selectbox(
+        "📊 Experience Level",
+        ["Entry Level (0-2 years)", "Mid Level (2-5 years)", "Senior Level (5-10 years)", "Expert Level (10+ years)"],
+        help="Select your current experience level"
+    )
+    
+    # Preferred location
+    preferred_location = st.text_input(
+        "📍 Preferred Job Location",
+        placeholder="e.g., New York, Remote, San Francisco, London...",
+        help="Enter your preferred work location or 'Remote' for remote work"
+    )
+    
+    # Career goals
+    career_goals = st.text_area(
+        "🎯 Career Goals (Optional)",
+        placeholder="e.g., Become a Senior Software Engineer, Transition to Data Science, Start in Product Management...",
+        height=80,
+        help="Describe your career aspirations and goals"
+    )
+    
+    # Analyze button
+    if st.button("🔍 Analyze Job Market", key="analyze_btn", use_container_width=True):
+        if skills.strip():
+            st.session_state.analyze_clicked = True
             
-            # Format the analysis results with better styling
-            formatted_info = st.session_state.analysis_results.replace(
-                "*Eligible Job Roles:*", "<div class='info-label'>🎯 Eligible Job Roles</div>"
-            ).replace(
-                "*Skill Gap Analysis:*", "<div class='info-label'>📈 Skill Gap Analysis</div>"
-            ).replace(
-                "*Companies Hiring:*", "<div class='info-label'>🏢 Companies Hiring</div>"
-            ).replace(
-                "*Salary Packages:*", "<div class='info-label'>💰 Salary Packages</div>"
-            )
+            # Store user profile
+            st.session_state.user_profile = {
+                "Skills": skills,
+                "Experience Level": experience_level,
+                "Preferred Location": preferred_location,
+                "Career Goals": career_goals
+            }
             
-            st.markdown(formatted_info, unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-            
-            # Create PDF report
-            if st.session_state.user_profile:
-                pdf_bytes = create_job_report_pdf(st.session_state.analysis_results, st.session_state.user_profile)
-                if pdf_bytes:
-                    st.markdown("<div style='text-align: center; margin-top: 1.5rem;'>", unsafe_allow_html=True)
-                    download_filename = f"job_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
-                    st.download_button(
-                        label="📄 Download Career Report",
-                        data=pdf_bytes,
-                        file_name=download_filename,
-                        mime="application/pdf",
-                        key="download_pdf",
-                        use_container_width=True,
-                        help="Download a comprehensive PDF report with job analysis results",
-                    )
-                    st.markdown("</div>", unsafe_allow_html=True)
+            # Perform analysis
+            analysis_result = analyze_job_match(skills, experience_level, preferred_location, career_goals)
+            st.session_state.analysis_results = analysis_result
         else:
-            st.markdown("""
-            <div class="placeholder-content">
-                <div class="placeholder-icon">🎯</div>
-                <div class="placeholder-title">Ready to Find Your Dream Job?</div>
-                <div class="placeholder-description">Enter your skills and preferences, then click "Analyze Job Market" to discover personalized career opportunities</div>
-            </div>
-            """, unsafe_allow_html=True)
+            st.error("Please enter your skills to proceed with the analysis.")
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Results Section
+    st.markdown('<div class="dark-tagline">📊 Your career roadmap awaits!</div>', unsafe_allow_html=True)
+    
+    # Display results if available
+    if st.session_state.analysis_results:
+        st.markdown('<div class="results-card">', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 1.8rem; font-weight: 700; color: var(--accent-nude); margin-bottom: 1.5rem; text-align: center;">✨ Your Job Market Analysis</div>', unsafe_allow_html=True)
+        
+        # Format the analysis results with better styling
+        formatted_info = st.session_state.analysis_results.replace(
+            "*Eligible Job Roles:*", "<div class='info-label'>🎯 Eligible Job Roles</div>"
+        ).replace(
+            "*Skill Gap Analysis:*", "<div class='info-label'>📈 Skill Gap Analysis</div>"
+        ).replace(
+            "*Companies Hiring:*", "<div class='info-label'>🏢 Companies Hiring</div>"
+        ).replace(
+            "*Salary Packages:*", "<div class='info-label'>💰 Salary Packages</div>"
+        )
+        
+        st.markdown(formatted_info, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Create PDF report
+        if st.session_state.user_profile:
+            pdf_bytes = create_job_report_pdf(st.session_state.analysis_results, st.session_state.user_profile)
+            if pdf_bytes:
+                st.markdown("<div style='text-align: center; margin-top: 1.5rem;'>", unsafe_allow_html=True)
+                download_filename = f"job_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+                st.download_button(
+                    label="📄 Download Career Report",
+                    data=pdf_bytes,
+                    file_name=download_filename,
+                    mime="application/pdf",
+                    key="download_pdf",
+                    use_container_width=True,
+                    help="Download a comprehensive PDF report with job analysis results",
+                )
+                st.markdown("</div>", unsafe_allow_html=True)
+    else:
+        st.markdown("""
+        <div class="placeholder-content">
+            <div class="placeholder-icon">🎯</div>
+            <div class="placeholder-title">Ready to Find Your Dream Job?</div>
+            <div class="placeholder-description">Enter your skills and preferences, then click "Analyze Job Market" to discover personalized career opportunities</div>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Additional features section
     st.markdown("---")
