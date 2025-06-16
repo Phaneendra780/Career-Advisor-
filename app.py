@@ -13,7 +13,6 @@ from reportlab.lib.units import inch
 from datetime import datetime
 from io import BytesIO
 import re
-import time
 
 # Set page configuration with custom theme
 st.set_page_config(
@@ -23,23 +22,24 @@ st.set_page_config(
     page_icon="🚀"
 )
 
-# Enhanced CSS with animations
+# Peach-themed CSS with modern design
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     
-    /* Nude professional color palette */
+    /* Peach color palette */
     :root {
-        --primary-nude: #F5EFE6;
-        --secondary-nude: #E8DFCA;
-        --dark-nude: #D8C4B6;
-        --accent-nude: #967E76;
-        --text-dark: #3D3B40;
+        --primary-peach: #FFD3B6;
+        --secondary-peach: #FFAAA5;
+        --dark-peach: #FF8B94;
+        --light-peach: #FFE8D6;
+        --accent-peach: #D45113;
+        --text-dark: #4A4A4A;
         --text-light: #FFFFFF;
-        --glass-bg: rgba(245, 239, 230, 0.7);
-        --glass-border: rgba(232, 223, 202, 0.8);
-        --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-        --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+        --glass-bg: rgba(255, 255, 255, 0.2);
+        --glass-border: rgba(255, 255, 255, 0.3);
+        --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         --shadow-heavy: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     }
     
@@ -50,17 +50,39 @@ st.markdown("""
     
     /* Main app styling */
     .stApp {
-        background: var(--primary-nude) !important;
+        background: linear-gradient(135deg, var(--primary-peach), var(--secondary-peach)) !important;
+        background-attachment: fixed !important;
         min-height: 100vh;
     }
     
-    /* Container styling with professional look */
+    /* Animated background elements */
+    .stApp::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+            radial-gradient(circle at 20% 80%, rgba(255, 211, 182, 0.4) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(255, 170, 165, 0.4) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(255, 139, 148, 0.3) 0%, transparent 50%);
+        z-index: -1;
+        animation: backgroundShift 15s ease-in-out infinite;
+    }
+    
+    @keyframes backgroundShift {
+        0%, 100% { transform: rotate(0deg) scale(1); }
+        50% { transform: rotate(1deg) scale(1.02); }
+    }
+    
+    /* Container styling with glassmorphism */
     .main .block-container {
         background: var(--glass-bg) !important;
-        backdrop-filter: blur(10px) !important;
-        border-radius: 12px !important;
+        backdrop-filter: blur(20px) !important;
+        border-radius: 20px !important;
         border: 1px solid var(--glass-border) !important;
-        box-shadow: var(--shadow-medium) !important;
+        box-shadow: var(--shadow-heavy) !important;
         padding: 2rem !important;
         margin-top: 1rem !important;
         animation: fadeInUp 0.8s ease-out;
@@ -71,222 +93,295 @@ st.markdown("""
         to { opacity: 1; transform: translateY(0); }
     }
     
-    /* Enhanced Animations */
-    @keyframes rainbowPulse {
-        0% { box-shadow: 0 0 10px rgba(150, 126, 118, 0.7); }
-        25% { box-shadow: 0 0 15px rgba(150, 100, 118, 0.7); }
-        50% { box-shadow: 0 0 20px rgba(150, 126, 150, 0.7); }
-        75% { box-shadow: 0 0 15px rgba(100, 126, 118, 0.7); }
-        100% { box-shadow: 0 0 10px rgba(150, 126, 118, 0.7); }
+    /* Header styling */
+    .main-header {
+        font-size: 3.5rem !important;
+        font-weight: 800 !important;
+        background: linear-gradient(135deg, var(--accent-peach), var(--dark-peach)) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        background-clip: text !important;
+        text-align: center !important;
+        margin-bottom: 1rem !important;
+        text-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+        animation: titleGlow 3s ease-in-out infinite alternate;
+        line-height: 1.1 !important;
     }
-
-    @keyframes bounce {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
+    
+    @keyframes titleGlow {
+        from { filter: brightness(1) drop-shadow(0 0 5px rgba(212, 81, 19, 0.5)); }
+        to { filter: brightness(1.1) drop-shadow(0 0 20px rgba(212, 81, 19, 0.8)); }
     }
-
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-5px); }
-        75% { transform: translateX(5px); }
+    
+    .subtitle {
+        text-align: center;
+        font-size: 1.3rem;
+        font-weight: 500;
+        color: var(--text-dark);
+        margin-bottom: 2rem;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        animation: fadeIn 1s ease-out 0.3s both;
     }
-
-    @keyframes flipInX {
-        from { 
-            transform: perspective(400px) rotateX(90deg);
-            opacity: 0;
-        }
-        to { 
-            transform: perspective(400px) rotateX(0deg);
-            opacity: 1;
-        }
-    }
-
-    @keyframes tada {
-        0% { transform: scale(1); }
-        10%, 20% { transform: scale(0.9) rotate(-3deg); }
-        30%, 50%, 70%, 90% { transform: scale(1.1) rotate(3deg); }
-        40%, 60%, 80% { transform: scale(1.1) rotate(-3deg); }
-        100% { transform: scale(1) rotate(0); }
-    }
-
+    
     @keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
     }
     
-    @keyframes slideInFromBottom {
-        from { transform: translateY(20px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-    }
-    
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.02); }
-        100% { transform: scale(1); }
-    }
-    
-    @keyframes float {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-5px); }
-        100% { transform: translateY(0px); }
-    }
-    
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-    
-    /* Header styling */
-    .main-header {
-        font-size: 3rem !important;
-        font-weight: 700 !important;
-        color: var(--accent-nude) !important;
-        text-align: center !important;
-        margin-bottom: 1rem !important;
-        letter-spacing: -0.5px;
-        animation: flipInX 1s ease-out, float 4s ease-in-out infinite !important;
-    }
-    
-    .subtitle {
-        text-align: center;
-        font-size: 1.2rem;
-        font-weight: 400;
-        color: var(--text-dark);
-        margin-bottom: 2rem;
-        opacity: 0.9;
-        animation: fadeIn 1.2s ease-out;
-    }
-    
-    /* Card styling */
+    /* Card styling with enhanced glassmorphism */
     .glass-card {
-        background: var(--text-light) !important;
-        border-radius: 12px !important;
-        border: 1px solid var(--secondary-nude) !important;
+        background: rgba(255, 255, 255, 0.25) !important;
+        backdrop-filter: blur(20px) !important;
+        border-radius: 20px !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
         padding: 2rem !important;
         margin-bottom: 2rem !important;
-        box-shadow: var(--shadow-light) !important;
-        transition: all 0.3s ease !important;
+        box-shadow: var(--shadow-medium) !important;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+    
+    .glass-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.6s;
+    }
+    
+    .glass-card:hover::before {
+        left: 100%;
     }
     
     .glass-card:hover {
-        transform: translateY(-3px) !important;
-        box-shadow: var(--shadow-medium) !important;
-        border-color: var(--accent-nude) !important;
+        transform: translateY(-5px) !important;
+        box-shadow: var(--shadow-heavy) !important;
+        border-color: rgba(255, 255, 255, 0.4) !important;
     }
     
     /* Input section styling */
     .input-section {
-        background: var(--text-light) !important;
-        border-radius: 12px !important;
-        border: 1px solid var(--secondary-nude) !important;
-        padding: 2rem !important;
+        background: rgba(255, 255, 255, 0.3) !important;
+        backdrop-filter: blur(25px) !important;
+        border-radius: 25px !important;
+        border: 1px solid rgba(255, 255, 255, 0.4) !important;
+        padding: 2.5rem !important;
         margin-bottom: 2rem !important;
-        box-shadow: var(--shadow-light) !important;
-        animation: fadeIn 1.4s ease-out;
+        box-shadow: var(--shadow-medium) !important;
+        transition: all 0.3s ease !important;
+        animation: slideInLeft 0.8s ease-out;
     }
     
-    /* Tagline styling */
+    @keyframes slideInLeft {
+        from { opacity: 0; transform: translateX(-50px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .input-section:hover {
+        background: rgba(255, 255, 255, 0.35) !important;
+        border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+    
+    /* Tagline styling with peach backgrounds */
     .tagline {
         text-align: center !important;
-        font-size: 1.2rem !important;
-        font-weight: 500 !important;
-        color: var(--accent-nude) !important;
-        margin: 1.5rem auto !important;
-        padding: 0.8rem 1.5rem !important;
-        border-radius: 8px !important;
-        background: var(--text-light) !important;
-        border: 1px solid var(--secondary-nude) !important;
+        font-size: 1.4rem !important;
+        font-weight: 700 !important;
+        color: var(--text-dark) !important;
+        margin: 2rem auto !important;
+        padding: 1rem 2rem !important;
+        border-radius: 50px !important;
+        background: linear-gradient(135deg, var(--primary-peach), var(--light-peach)) !important;
         max-width: 500px !important;
-        animation: fadeIn 1s ease-out, bounce 3s infinite !important;
+        box-shadow: var(--shadow-medium) !important;
+        transform: translateY(0) !important;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        animation: bounceIn 1s ease-out;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+    
+    @keyframes bounceIn {
+        0% { transform: scale(0.3) translateY(-50px); opacity: 0; }
+        50% { transform: scale(1.05) translateY(-10px); }
+        70% { transform: scale(0.9) translateY(0); }
+        100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    
+    .tagline:hover {
+        transform: translateY(-3px) scale(1.02) !important;
+        box-shadow: var(--shadow-heavy) !important;
     }
     
     .dark-tagline {
         text-align: center !important;
-        font-size: 1.2rem !important;
-        font-weight: 500 !important;
-        color: var(--text-light) !important;
-        margin: 1.5rem auto !important;
-        padding: 0.8rem 1.5rem !important;
-        border-radius: 8px !important;
-        background: var(--accent-nude) !important;
+        font-size: 1.4rem !important;
+        font-weight: 700 !important;
+        color: var(--text-dark) !important;
+        margin: 2rem auto !important;
+        padding: 1rem 2rem !important;
+        border-radius: 50px !important;
+        background: linear-gradient(135deg, var(--secondary-peach), var(--dark-peach)) !important;
         max-width: 500px !important;
-        animation: fadeIn 1s ease-out, bounce 3s infinite !important;
+        box-shadow: var(--shadow-medium) !important;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        animation: slideInRight 0.8s ease-out;
     }
     
-    /* Button styling */
+    @keyframes slideInRight {
+        from { opacity: 0; transform: translateX(50px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .dark-tagline:hover {
+        transform: translateY(-3px) scale(1.02) !important;
+        box-shadow: var(--shadow-heavy) !important;
+    }
+    
+    /* Button styling with peach accents */
     .stButton > button {
-        background: var(--accent-nude) !important;
-        color: var(--text-light) !important;
-        font-weight: 500 !important;
-        font-size: 1rem !important;
-        border-radius: 8px !important;
-        padding: 0.7rem 1.5rem !important;
+        background: linear-gradient(135deg, var(--accent-peach), var(--dark-peach)) !important;
+        color: white !important;
+        font-weight: 700 !important;
+        font-size: 1.1rem !important;
+        border-radius: 50px !important;
+        padding: 0.8rem 2.5rem !important;
+        width: 100% !important;
         border: none !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: var(--shadow-medium) !important;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+    
+    .stButton > button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.6s;
+    }
+    
+    .stButton > button:hover::before {
+        left: 100%;
     }
     
     .stButton > button:hover {
-        background: var(--dark-nude) !important;
+        transform: translateY(-3px) scale(1.02) !important;
+        box-shadow: var(--shadow-heavy) !important;
+        background: linear-gradient(135deg, var(--dark-peach), var(--accent-peach)) !important;
+    }
+    
+    .stButton > button:active {
+        transform: translateY(-1px) scale(0.98) !important;
+    }
+    
+    /* Download button styling */
+    .stDownloadButton > button {
+        background: linear-gradient(135deg, var(--secondary-peach), var(--accent-peach)) !important;
+        color: white !important;
+        font-weight: 700 !important;
+        border-radius: 50px !important;
+        border: none !important;
         box-shadow: var(--shadow-medium) !important;
-        animation: rainbowPulse 2s infinite, tada 1s !important;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    }
+    
+    .stDownloadButton > button:hover {
+        transform: translateY(-3px) scale(1.02) !important;
+        box-shadow: var(--shadow-heavy) !important;
     }
     
     /* Feature box styling */
     .feature-box {
-        background: var(--text-light) !important;
-        border-radius: 12px !important;
-        border: 1px solid var(--secondary-nude) !important;
+        background: rgba(255, 255, 255, 0.25) !important;
+        backdrop-filter: blur(15px) !important;
+        border-radius: 20px !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
         padding: 1.5rem !important;
         text-align: center !important;
-        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        box-shadow: var(--shadow-light) !important;
         height: 100% !important;
-        animation: fadeIn 1s ease-out;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+    
+    .feature-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, var(--accent-peach), var(--dark-peach));
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .feature-box:hover::before {
+        transform: scaleX(1);
     }
     
     .feature-box:hover {
-        animation: pulse 1s infinite, rainbowPulse 3s infinite !important;
-        transform: scale(1.03) !important;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        transform: translateY(-10px) !important;
+        box-shadow: var(--shadow-heavy) !important;
+        background: rgba(255, 255, 255, 0.3) !important;
     }
     
     .feature-icon {
-        font-size: 2.5rem !important;
+        font-size: 3rem !important;
         margin-bottom: 1rem !important;
-        color: var(--accent-nude) !important;
+        animation: float 3s ease-in-out infinite !important;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
     }
     
     .feature-title {
-        font-weight: 600 !important;
-        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        font-size: 1.2rem !important;
         color: var(--text-dark) !important;
         margin-bottom: 0.5rem !important;
     }
     
     .feature-description {
         color: var(--text-dark) !important;
-        font-size: 0.9rem !important;
+        font-size: 0.95rem !important;
         line-height: 1.5 !important;
-        opacity: 0.8;
     }
     
     /* Results section styling */
     .results-card {
-        background: var(--text-light) !important;
-        border-radius: 12px !important;
-        border: 1px solid var(--secondary-nude) !important;
+        background: rgba(255, 255, 255, 0.25) !important;
+        backdrop-filter: blur(20px) !important;
+        border-radius: 25px !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
         padding: 2rem !important;
-        box-shadow: var(--shadow-light) !important;
+        box-shadow: var(--shadow-medium) !important;
+        animation: slideInRight 0.8s ease-out;
         min-height: 400px !important;
-        animation: fadeIn 0.8s ease-out, slideInFromBottom 0.6s ease-out !important;
     }
     
     .info-label {
-        font-weight: 600 !important;
-        color: var(--accent-nude) !important;
-        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        color: var(--accent-peach) !important;
+        font-size: 1.2rem !important;
         margin-top: 1.5rem !important;
-        margin-bottom: 0.5rem !important;
+        margin-bottom: 1rem !important;
+        padding: 0.5rem 1rem !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+        border-radius: 15px !important;
+        border-left: 4px solid var(--accent-peach) !important;
     }
     
     /* Text styling */
@@ -298,26 +393,25 @@ st.markdown("""
     .stTextArea > div > div > textarea,
     .stTextInput > div > div > input,
     .stSelectbox > div > div > select {
-        background: var(--text-light) !important;
+        background: rgba(255, 255, 255, 0.3) !important;
         color: var(--text-dark) !important;
-        border: 1px solid var(--secondary-nude) !important;
-        border-radius: 8px !important;
+        border: 2px solid rgba(255, 255, 255, 0.4) !important;
+        border-radius: 15px !important;
+        backdrop-filter: blur(10px) !important;
         transition: all 0.3s ease !important;
     }
     
     .stTextArea > div > div > textarea:focus,
     .stTextInput > div > div > input:focus,
     .stSelectbox > div > div > select:focus {
-        border-color: var(--accent-nude) !important;
-        box-shadow: 0 0 0 2px rgba(150, 126, 118, 0.1) !important;
-        transform: scale(1.01);
-        animation: rainbowPulse 3s infinite !important;
-        border-width: 2px !important;
+        border-color: var(--accent-peach) !important;
+        box-shadow: 0 0 0 3px rgba(212, 81, 19, 0.1) !important;
+        transform: scale(1.02) !important;
     }
     
     .stTextArea > div > div > textarea::placeholder,
     .stTextInput > div > div > input::placeholder {
-        color: rgba(61, 59, 64, 0.5) !important;
+        color: rgba(74, 74, 74, 0.7) !important;
     }
     
     /* Label styling */
@@ -325,20 +419,26 @@ st.markdown("""
     .stTextInput > label,
     .stSelectbox > label {
         color: var(--text-dark) !important;
-        font-weight: 500 !important;
-        font-size: 1rem !important;
+        font-weight: 600 !important;
+        font-size: 1.1rem !important;
     }
     
     /* Disclaimer styling */
     .disclaimer-box {
-        background: rgba(150, 126, 118, 0.1) !important;
-        border: 1px solid var(--secondary-nude) !important;
-        border-left: 4px solid var(--accent-nude) !important;
-        border-radius: 8px !important;
+        background: rgba(212, 81, 19, 0.15) !important;
+        backdrop-filter: blur(15px) !important;
+        border: 1px solid rgba(212, 81, 19, 0.3) !important;
+        border-left: 5px solid var(--accent-peach) !important;
+        border-radius: 15px !important;
         padding: 1rem !important;
         margin: 1rem 0 !important;
         color: var(--text-dark) !important;
-        animation: fadeIn 1s ease-out;
+        animation: slideInDown 0.6s ease-out;
+    }
+    
+    @keyframes slideInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     
     /* Placeholder content styling */
@@ -349,59 +449,43 @@ st.markdown("""
         align-items: center !important;
         height: 400px !important;
         text-align: center !important;
-        background: var(--text-light) !important;
-        border-radius: 12px !important;
-        border: 2px dashed var(--secondary-nude) !important;
-        animation: fadeIn 1s ease-out;
+        background: rgba(255, 255, 255, 0.2) !important;
+        backdrop-filter: blur(15px) !important;
+        border-radius: 25px !important;
+        border: 2px dashed rgba(255, 255, 255, 0.4) !important;
+        animation: pulse 2s ease-in-out infinite !important;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 0.7; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.02); }
     }
     
     .placeholder-icon {
-        font-size: 4rem !important;
+        font-size: 5rem !important;
         margin-bottom: 1rem !important;
-        color: var(--secondary-nude) !important;
-        animation: bounce 2s infinite, spin 4s linear infinite !important;
+        color: var(--accent-peach) !important;
+        animation: bounce 2s ease-in-out infinite !important;
+    }
+    
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
     }
     
     .placeholder-title {
-        font-weight: 600 !important;
-        font-size: 1.3rem !important;
+        font-weight: 700 !important;
+        font-size: 1.5rem !important;
         color: var(--text-dark) !important;
         margin-bottom: 0.5rem !important;
     }
     
     .placeholder-description {
         color: var(--text-dark) !important;
-        font-size: 1rem !important;
+        font-size: 1.1rem !important;
         line-height: 1.5 !important;
-        opacity: 0.7;
-    }
-    
-    /* Loading animation */
-    .loading-spinner {
-        animation: spin 1s linear infinite;
-        width: 30px;
-        height: 30px;
-        border: 4px solid var(--accent-nude);
-        border-top: 4px solid transparent;
-        border-radius: 50%;
-        margin: 20px auto;
-    }
-    
-    /* Animated download button */
-    .stDownloadButton > button {
-        transition: all 0.3s !important;
-    }
-    
-    .stDownloadButton > button:hover {
-        animation: rainbowPulse 1.5s infinite !important;
-        transform: scale(1.05) !important;
-    }
-
-    /* Animated success message */
-    .success-message {
-        animation: bounce 0.6s, fadeIn 0.5s !important;
-        color: var(--accent-nude) !important;
-        font-weight: 600 !important;
+        opacity: 0.8;
     }
     
     /* Footer styling */
@@ -409,18 +493,26 @@ st.markdown("""
         text-align: center !important;
         margin-top: 3rem !important;
         padding-top: 2rem !important;
-        border-top: 1px solid var(--secondary-nude) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
         color: var(--text-dark) !important;
-        font-size: 0.85rem !important;
-        opacity: 0.8;
-        animation: fadeIn 1.5s ease-out;
+        font-size: 0.9rem !important;
+        animation: fadeIn 1s ease-out 1s both;
+    }
+    
+    /* Loading animation */
+    .stSpinner > div {
+        border-color: var(--accent-peach) rgba(212,81,19,0.1) rgba(212,81,19,0.1) rgba(212,81,19,0.1) !important;
     }
     
     /* Responsive design */
     @media (max-width: 768px) {
         .main-header {
-            font-size: 2.2rem !important;
-            animation: fadeIn 1s ease-out !important;
+            font-size: 2.5rem !important;
+        }
+        
+        .tagline, .dark-tagline {
+            font-size: 1.2rem !important;
+            margin: 1rem auto !important;
         }
         
         .glass-card, .input-section, .results-card {
@@ -430,15 +522,25 @@ st.markdown("""
         .feature-box {
             margin-bottom: 1rem !important;
         }
-        
-        .feature-box:hover {
-            animation: none !important;
-            transform: none !important;
-        }
-        
-        .tagline, .dark-tagline {
-            animation: fadeIn 1s ease-out !important;
-        }
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: rgba(212, 81, 19, 0.3);
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(212, 81, 19, 0.5);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -553,36 +655,8 @@ def analyze_job_match(skills, experience_level, preferred_location, career_goals
         Use current market data from job portals, company websites, and industry reports.
         """
         
-        # Create a custom loading container
-        loading_container = st.empty()
-        with loading_container.container():
-            st.markdown("""
-            <div style="text-align: center; padding: 2rem;">
-                <div class="loading-spinner"></div>
-                <div style="margin-top: 1rem; font-size: 1.1rem; color: var(--accent-nude);">
-                    <span style="display: inline-block; animation: shake 0.5s infinite;">🔍</span> 
-                    Analyzing job market opportunities...
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-            
+        with st.spinner("🔍 Analyzing job market and matching opportunities..."):
             response = agent.run(query)
-            loading_container.empty()
-            
-            # Show success animation
-            success_container = st.empty()
-            with success_container.container():
-                st.markdown("""
-                <div class="success-message" style="text-align: center; margin: 1rem 0; font-size: 1.2rem;">
-                    ✓ Analysis complete! Here are your results
-                </div>
-                """, unsafe_allow_html=True)
-                st.balloons()
-            
-            # Remove success message after delay
-            time.sleep(2)
-            success_container.empty()
-            
             return response.content.strip()
     except Exception as e:
         st.error(f"Error analyzing job match: {e}")
@@ -617,7 +691,7 @@ def create_job_report_pdf(analysis_results, user_profile):
             'Heading',
             parent=styles['Heading2'],
             fontSize=14,
-            textColor=colors.HexColor('#967E76'),  # Using the accent nude color
+            textColor=colors.HexColor('#D45113'),  # Using the accent peach color
             spaceAfter=6
         )
         normal_style = ParagraphStyle(
@@ -695,12 +769,14 @@ def main():
         st.session_state.user_profile = {}
 
     # Header
-    st.markdown('<div class="main-header">🚀 AI Job Matcher</div>', unsafe_allow_html=True)
-    st.markdown("""
-    <div class="subtitle">
-        Discover your perfect career path with AI-powered job matching
-    </div>
-    """, unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.markdown('<div class="main-header">🚀 AI Job Matcher</div>', unsafe_allow_html=True)
+        st.markdown("""
+        <div class="subtitle">
+            Discover your perfect career path with AI-powered job matching
+        </div>
+        """, unsafe_allow_html=True)
     
     # Disclaimer
     st.markdown("""
@@ -715,118 +791,118 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # Input Section
-    st.markdown('<div class="tagline">🎯 Transform your skills into opportunities!</div>', unsafe_allow_html=True)
+    # Main content in two-column layout
+    col1, col2 = st.columns([1, 1], gap="large")
     
-    st.markdown('<div class="input-section">', unsafe_allow_html=True)
-    
-    # Skills input
-    skills = st.text_area(
-        "🛠️ Your Skills",
-        placeholder="e.g., Python, JavaScript, React, SQL, Machine Learning, Project Management, Data Analysis...",
-        height=100,
-        help="List all your technical and soft skills separated by commas"
-    )
-    
-    # Experience level
-    experience_level = st.selectbox(
-        "📊 Experience Level",
-        ["Entry Level (0-2 years)", "Mid Level (2-5 years)", "Senior Level (5-10 years)", "Expert Level (10+ years)"],
-        help="Select your current experience level"
-    )
-    
-    # Preferred location
-    preferred_location = st.text_input(
-        "📍 Preferred Job Location",
-        placeholder="e.g., New York, Remote, San Francisco, London...",
-        help="Enter your preferred work location or 'Remote' for remote work"
-    )
-    
-    # Career goals
-    career_goals = st.text_area(
-        "🎯 Career Goals (Optional)",
-        placeholder="e.g., Become a Senior Software Engineer, Transition to Data Science, Start in Product Management...",
-        height=80,
-        help="Describe your career aspirations and goals"
-    )
-    
-    # Analyze button
-    if st.button("🔍 Analyze Job Market", key="analyze_btn", use_container_width=True):
-        if skills.strip():
-            st.session_state.analyze_clicked = True
-            
-            # Store user profile
-            st.session_state.user_profile = {
-                "Skills": skills,
-                "Experience Level": experience_level,
-                "Preferred Location": preferred_location,
-                "Career Goals": career_goals
-            }
-            
-            # Perform analysis
-            analysis_result = analyze_job_match(skills, experience_level, preferred_location, career_goals)
-            st.session_state.analysis_results = analysis_result
-        else:
-            st.error("Please enter your skills to proceed with the analysis.")
-    
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Results Section
-    st.markdown('<div class="dark-tagline">📊 Your career roadmap awaits!</div>', unsafe_allow_html=True)
-    
-    # Display results if available
-    if st.session_state.analysis_results:
-        st.markdown('<div class="results-card">', unsafe_allow_html=True)
-        st.markdown("""
-        <div style="font-size: 1.8rem; font-weight: 700; color: var(--accent-nude); margin-bottom: 1.5rem; 
-                    text-align: center; animation: flipInX 0.8s ease-out;">
-            <span style="display: inline-block; animation: tada 1s 1;">✨</span> Your Job Market Analysis
-        </div>
-        """, unsafe_allow_html=True)
+    with col1:
+        # Tagline above the input section
+        st.markdown('<div class="tagline">🎯 Transform your skills into opportunities!</div>', unsafe_allow_html=True)
         
-        # Format the analysis results with better styling
-        formatted_info = st.session_state.analysis_results.replace(
-            "*Eligible Job Roles:*", "<div class='info-label'>🎯 Eligible Job Roles</div>"
-        ).replace(
-            "*Skill Gap Analysis:*", "<div class='info-label'>📈 Skill Gap Analysis</div>"
-        ).replace(
-            "*Companies Hiring:*", "<div class='info-label'>🏢 Companies Hiring</div>"
-        ).replace(
-            "*Salary Packages:*", "<div class='info-label'>💰 Salary Packages</div>"
+        st.markdown('<div class="input-section">', unsafe_allow_html=True)
+        
+        # Skills input
+        skills = st.text_area(
+            "🛠️ Your Skills",
+            placeholder="e.g., Python, JavaScript, React, SQL, Machine Learning, Project Management, Data Analysis...",
+            height=100,
+            help="List all your technical and soft skills separated by commas"
         )
         
-        st.markdown(formatted_info, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        # Experience level
+        experience_level = st.selectbox(
+            "📊 Experience Level",
+            ["Entry Level (0-2 years)", "Mid Level (2-5 years)", "Senior Level (5-10 years)", "Expert Level (10+ years)"],
+            help="Select your current experience level"
+        )
         
-        # Create PDF report
-        if st.session_state.user_profile:
-            pdf_bytes = create_job_report_pdf(st.session_state.analysis_results, st.session_state.user_profile)
-            if pdf_bytes:
-                st.markdown("<div style='text-align: center; margin-top: 1.5rem;'>", unsafe_allow_html=True)
-                download_filename = f"job_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
-                st.download_button(
-                    label="📄 Download Career Report",
-                    data=pdf_bytes,
-                    file_name=download_filename,
-                    mime="application/pdf",
-                    key="download_pdf",
-                    use_container_width=True,
-                    help="Download a comprehensive PDF report with job analysis results",
-                )
-                st.markdown("</div>", unsafe_allow_html=True)
-    else:
-        st.markdown("""
-        <div class="placeholder-content">
-            <div class="placeholder-icon">🎯</div>
-            <div class="placeholder-title">Ready to Find Your Dream Job?</div>
-            <div class="placeholder-description">Enter your skills and preferences, then click "Analyze Job Market" to discover personalized career opportunities</div>
-        </div>
-        """, unsafe_allow_html=True)
+        # Preferred location
+        preferred_location = st.text_input(
+            "📍 Preferred Job Location",
+            placeholder="e.g., New York, Remote, San Francisco, London...",
+            help="Enter your preferred work location or 'Remote' for remote work"
+        )
+        
+        # Career goals
+        career_goals = st.text_area(
+            "🎯 Career Goals (Optional)",
+            placeholder="e.g., Become a Senior Software Engineer, Transition to Data Science, Start in Product Management...",
+            height=80,
+            help="Describe your career aspirations and goals"
+        )
+        
+        # Analyze button
+        if st.button("🔍 Analyze Job Market", key="analyze_btn"):
+            if skills.strip():
+                st.session_state.analyze_clicked = True
+                
+                # Store user profile
+                st.session_state.user_profile = {
+                    "Skills": skills,
+                    "Experience Level": experience_level,
+                    "Preferred Location": preferred_location,
+                    "Career Goals": career_goals
+                }
+                
+                # Perform analysis
+                analysis_result = analyze_job_match(skills, experience_level, preferred_location, career_goals)
+                st.session_state.analysis_results = analysis_result
+            else:
+                st.error("Please enter your skills to proceed with the analysis.")
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    with col2:
+        # Tagline above the results section
+        st.markdown('<div class="dark-tagline">📊 Your career roadmap awaits!</div>', unsafe_allow_html=True)
+        
+        # Display results if available
+        if st.session_state.analysis_results:
+            st.markdown('<div class="results-card">', unsafe_allow_html=True)
+            st.markdown('<div style="font-size: 1.8rem; font-weight: 700; color: var(--accent-peach); margin-bottom: 1.5rem; text-align: center;">✨ Your Job Market Analysis</div>', unsafe_allow_html=True)
+            
+            # Format the analysis results with better styling
+            formatted_info = st.session_state.analysis_results.replace(
+                "*Eligible Job Roles:*", "<div class='info-label'>🎯 Eligible Job Roles</div>"
+            ).replace(
+                "*Skill Gap Analysis:*", "<div class='info-label'>📈 Skill Gap Analysis</div>"
+            ).replace(
+                "*Companies Hiring:*", "<div class='info-label'>🏢 Companies Hiring</div>"
+            ).replace(
+                "*Salary Packages:*", "<div class='info-label'>💰 Salary Packages</div>"
+            )
+            
+            st.markdown(formatted_info, unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+            # Create PDF report
+            if st.session_state.user_profile:
+                pdf_bytes = create_job_report_pdf(st.session_state.analysis_results, st.session_state.user_profile)
+                if pdf_bytes:
+                    st.markdown("<div style='text-align: center; margin-top: 1.5rem;'>", unsafe_allow_html=True)
+                    download_filename = f"job_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+                    st.download_button(
+                        label="📄 Download Career Report",
+                        data=pdf_bytes,
+                        file_name=download_filename,
+                        mime="application/pdf",
+                        key="download_pdf",
+                        use_container_width=True,
+                        help="Download a comprehensive PDF report with job analysis results",
+                    )
+                    st.markdown("</div>", unsafe_allow_html=True)
+        else:
+            st.markdown("""
+            <div class="placeholder-content">
+                <div class="placeholder-icon">🎯</div>
+                <div class="placeholder-title">Ready to Find Your Dream Job?</div>
+                <div class="placeholder-description">Enter your skills and preferences, then click "Analyze Job Market" to discover personalized career opportunities</div>
+            </div>
+            """, unsafe_allow_html=True)
     
     # Additional features section
     st.markdown("---")
     st.markdown("""
-    <div style="text-align: center; font-size: 2rem; font-weight: 700; color: var(--accent-nude); margin: 2rem 0;">
+    <div style="text-align: center; font-size: 2rem; font-weight: 700; color: var(--accent-peach); margin: 2rem 0;">
         🚀 What You'll Discover
     </div>
     """, unsafe_allow_html=True)
@@ -873,9 +949,10 @@ def main():
     st.markdown("""
     <div class="footer">
         ✨ Powered by cutting-edge AI technology • Gemini Flash 2 Pro + Tavily • Real-time Job Market Intelligence<br>
-        <strong>©️ 2025 AI Job Matcher - Your Gateway to Career Success</strong>
+        <strong>© 2025 AI Job Matcher - Your Gateway to Career Success</strong>
     </div>
     """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
+peach colour
