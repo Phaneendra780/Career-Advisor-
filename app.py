@@ -314,6 +314,10 @@ st.markdown("""
         .glass-card, .input-section, .results-card {
             padding: 1.5rem !important;
         }
+        
+        .feature-box {
+            margin-bottom: 1rem !important;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -542,14 +546,12 @@ def main():
         st.session_state.user_profile = {}
 
     # Header
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.markdown('<div class="main-header">🚀 AI Job Matcher</div>', unsafe_allow_html=True)
-        st.markdown("""
-        <div class="subtitle">
-            Discover your perfect career path with AI-powered job matching
-        </div>
-        """, unsafe_allow_html=True)
+    st.markdown('<div class="main-header">🚀 AI Job Matcher</div>', unsafe_allow_html=True)
+    st.markdown("""
+    <div class="subtitle">
+        Discover your perfect career path with AI-powered job matching
+    </div>
+    """, unsafe_allow_html=True)
     
     # Disclaimer
     st.markdown("""
@@ -564,113 +566,108 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # Main content in two-column layout
-    col1, col2 = st.columns([1, 1], gap="large")
+    # Input Section
+    st.markdown('<div class="tagline">🎯 Transform your skills into opportunities!</div>', unsafe_allow_html=True)
     
-    with col1:
-        # Tagline above the input section
-        st.markdown('<div class="tagline">🎯 Transform your skills into opportunities!</div>', unsafe_allow_html=True)
-        
-        st.markdown('<div class="input-section">', unsafe_allow_html=True)
-        
-        # Skills input
-        skills = st.text_area(
-            "🛠️ Your Skills",
-            placeholder="e.g., Python, JavaScript, React, SQL, Machine Learning, Project Management, Data Analysis...",
-            height=100,
-            help="List all your technical and soft skills separated by commas"
-        )
-        
-        # Experience level
-        experience_level = st.selectbox(
-            "📊 Experience Level",
-            ["Entry Level (0-2 years)", "Mid Level (2-5 years)", "Senior Level (5-10 years)", "Expert Level (10+ years)"],
-            help="Select your current experience level"
-        )
-        
-        # Preferred location
-        preferred_location = st.text_input(
-            "📍 Preferred Job Location",
-            placeholder="e.g., New York, Remote, San Francisco, London...",
-            help="Enter your preferred work location or 'Remote' for remote work"
-        )
-        
-        # Career goals
-        career_goals = st.text_area(
-            "🎯 Career Goals (Optional)",
-            placeholder="e.g., Become a Senior Software Engineer, Transition to Data Science, Start in Product Management...",
-            height=80,
-            help="Describe your career aspirations and goals"
-        )
-        
-        # Analyze button
-        if st.button("🔍 Analyze Job Market", key="analyze_btn"):
-            if skills.strip():
-                st.session_state.analyze_clicked = True
-                
-                # Store user profile
-                st.session_state.user_profile = {
-                    "Skills": skills,
-                    "Experience Level": experience_level,
-                    "Preferred Location": preferred_location,
-                    "Career Goals": career_goals
-                }
-                
-                # Perform analysis
-                analysis_result = analyze_job_match(skills, experience_level, preferred_location, career_goals)
-                st.session_state.analysis_results = analysis_result
-            else:
-                st.error("Please enter your skills to proceed with the analysis.")
-        
-        st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<div class="input-section">', unsafe_allow_html=True)
     
-    with col2:
-        # Tagline above the results section
-        st.markdown('<div class="dark-tagline">📊 Your career roadmap awaits!</div>', unsafe_allow_html=True)
-        
-        # Display results if available
-        if st.session_state.analysis_results:
-            st.markdown('<div class="results-card">', unsafe_allow_html=True)
-            st.markdown('<div style="font-size: 1.8rem; font-weight: 700; color: var(--accent-nude); margin-bottom: 1.5rem; text-align: center;">✨ Your Job Market Analysis</div>', unsafe_allow_html=True)
+    # Skills input
+    skills = st.text_area(
+        "🛠️ Your Skills",
+        placeholder="e.g., Python, JavaScript, React, SQL, Machine Learning, Project Management, Data Analysis...",
+        height=100,
+        help="List all your technical and soft skills separated by commas"
+    )
+    
+    # Experience level
+    experience_level = st.selectbox(
+        "📊 Experience Level",
+        ["Entry Level (0-2 years)", "Mid Level (2-5 years)", "Senior Level (5-10 years)", "Expert Level (10+ years)"],
+        help="Select your current experience level"
+    )
+    
+    # Preferred location
+    preferred_location = st.text_input(
+        "📍 Preferred Job Location",
+        placeholder="e.g., New York, Remote, San Francisco, London...",
+        help="Enter your preferred work location or 'Remote' for remote work"
+    )
+    
+    # Career goals
+    career_goals = st.text_area(
+        "🎯 Career Goals (Optional)",
+        placeholder="e.g., Become a Senior Software Engineer, Transition to Data Science, Start in Product Management...",
+        height=80,
+        help="Describe your career aspirations and goals"
+    )
+    
+    # Analyze button
+    if st.button("🔍 Analyze Job Market", key="analyze_btn", use_container_width=True):
+        if skills.strip():
+            st.session_state.analyze_clicked = True
             
-            # Format the analysis results with better styling
-            formatted_info = st.session_state.analysis_results.replace(
-                "*Eligible Job Roles:*", "<div class='info-label'>🎯 Eligible Job Roles</div>"
-            ).replace(
-                "*Skill Gap Analysis:*", "<div class='info-label'>📈 Skill Gap Analysis</div>"
-            ).replace(
-                "*Companies Hiring:*", "<div class='info-label'>🏢 Companies Hiring</div>"
-            ).replace(
-                "*Salary Packages:*", "<div class='info-label'>💰 Salary Packages</div>"
-            )
+            # Store user profile
+            st.session_state.user_profile = {
+                "Skills": skills,
+                "Experience Level": experience_level,
+                "Preferred Location": preferred_location,
+                "Career Goals": career_goals
+            }
             
-            st.markdown(formatted_info, unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-            
-            # Create PDF report
-            if st.session_state.user_profile:
-                pdf_bytes = create_job_report_pdf(st.session_state.analysis_results, st.session_state.user_profile)
-                if pdf_bytes:
-                    st.markdown("<div style='text-align: center; margin-top: 1.5rem;'>", unsafe_allow_html=True)
-                    download_filename = f"job_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
-                    st.download_button(
-                        label="📄 Download Career Report",
-                        data=pdf_bytes,
-                        file_name=download_filename,
-                        mime="application/pdf",
-                        key="download_pdf",
-                        use_container_width=True,
-                        help="Download a comprehensive PDF report with job analysis results",
-                    )
-                    st.markdown("</div>", unsafe_allow_html=True)
+            # Perform analysis
+            analysis_result = analyze_job_match(skills, experience_level, preferred_location, career_goals)
+            st.session_state.analysis_results = analysis_result
         else:
-            st.markdown("""
-            <div class="placeholder-content">
-                <div class="placeholder-icon">🎯</div>
-                <div class="placeholder-title">Ready to Find Your Dream Job?</div>
-                <div class="placeholder-description">Enter your skills and preferences, then click "Analyze Job Market" to discover personalized career opportunities</div>
-            </div>
-            """, unsafe_allow_html=True)
+            st.error("Please enter your skills to proceed with the analysis.")
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Results Section
+    st.markdown('<div class="dark-tagline">📊 Your career roadmap awaits!</div>', unsafe_allow_html=True)
+    
+    # Display results if available
+    if st.session_state.analysis_results:
+        st.markdown('<div class="results-card">', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 1.8rem; font-weight: 700; color: var(--accent-nude); margin-bottom: 1.5rem; text-align: center;">✨ Your Job Market Analysis</div>', unsafe_allow_html=True)
+        
+        # Format the analysis results with better styling
+        formatted_info = st.session_state.analysis_results.replace(
+            "*Eligible Job Roles:*", "<div class='info-label'>🎯 Eligible Job Roles</div>"
+        ).replace(
+            "*Skill Gap Analysis:*", "<div class='info-label'>📈 Skill Gap Analysis</div>"
+        ).replace(
+            "*Companies Hiring:*", "<div class='info-label'>🏢 Companies Hiring</div>"
+        ).replace(
+            "*Salary Packages:*", "<div class='info-label'>💰 Salary Packages</div>"
+        )
+        
+        st.markdown(formatted_info, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        # Create PDF report
+        if st.session_state.user_profile:
+            pdf_bytes = create_job_report_pdf(st.session_state.analysis_results, st.session_state.user_profile)
+            if pdf_bytes:
+                st.markdown("<div style='text-align: center; margin-top: 1.5rem;'>", unsafe_allow_html=True)
+                download_filename = f"job_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+                st.download_button(
+                    label="📄 Download Career Report",
+                    data=pdf_bytes,
+                    file_name=download_filename,
+                    mime="application/pdf",
+                    key="download_pdf",
+                    use_container_width=True,
+                    help="Download a comprehensive PDF report with job analysis results",
+                )
+                st.markdown("</div>", unsafe_allow_html=True)
+    else:
+        st.markdown("""
+        <div class="placeholder-content">
+            <div class="placeholder-icon">🎯</div>
+            <div class="placeholder-title">Ready to Find Your Dream Job?</div>
+            <div class="placeholder-description">Enter your skills and preferences, then click "Analyze Job Market" to discover personalized career opportunities</div>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Additional features section
     st.markdown("---")
@@ -722,7 +719,7 @@ def main():
     st.markdown("""
     <div class="footer">
         ✨ Powered by cutting-edge AI technology • Gemini Flash 2 Pro + Tavily • Real-time Job Market Intelligence<br>
-        <strong>© 2025 AI Job Matcher - Your Gateway to Career Success</strong>
+        <strong>©️ 2025 AI Job Matcher - Your Gateway to Career Success</strong>
     </div>
     """, unsafe_allow_html=True)
 
