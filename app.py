@@ -22,24 +22,23 @@ st.set_page_config(
     page_icon="🚀"
 )
 
-# Peach-themed CSS with modern design
+# Nude and professional CSS with modern design
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     
-    /* Peach color palette */
+    /* Nude professional color palette */
     :root {
-        --primary-peach: #FFD3B6;
-        --secondary-peach: #FFAAA5;
-        --dark-peach: #FF8B94;
-        --light-peach: #FFE8D6;
-        --accent-peach: #D45113;
-        --text-dark: #4A4A4A;
+        --primary-nude: #F5EFE6;
+        --secondary-nude: #E8DFCA;
+        --dark-nude: #D8C4B6;
+        --accent-nude: #967E76;
+        --text-dark: #3D3B40;
         --text-light: #FFFFFF;
-        --glass-bg: rgba(255, 255, 255, 0.2);
-        --glass-border: rgba(255, 255, 255, 0.3);
-        --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --glass-bg: rgba(245, 239, 230, 0.7);
+        --glass-border: rgba(232, 223, 202, 0.8);
+        --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
         --shadow-heavy: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     }
     
@@ -50,39 +49,17 @@ st.markdown("""
     
     /* Main app styling */
     .stApp {
-        background: linear-gradient(135deg, var(--primary-peach), var(--secondary-peach)) !important;
-        background-attachment: fixed !important;
+        background: var(--primary-nude) !important;
         min-height: 100vh;
     }
     
-    /* Animated background elements */
-    .stApp::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: 
-            radial-gradient(circle at 20% 80%, rgba(255, 211, 182, 0.4) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(255, 170, 165, 0.4) 0%, transparent 50%),
-            radial-gradient(circle at 40% 40%, rgba(255, 139, 148, 0.3) 0%, transparent 50%);
-        z-index: -1;
-        animation: backgroundShift 15s ease-in-out infinite;
-    }
-    
-    @keyframes backgroundShift {
-        0%, 100% { transform: rotate(0deg) scale(1); }
-        50% { transform: rotate(1deg) scale(1.02); }
-    }
-    
-    /* Container styling with glassmorphism */
+    /* Container styling with professional look */
     .main .block-container {
         background: var(--glass-bg) !important;
-        backdrop-filter: blur(20px) !important;
-        border-radius: 20px !important;
+        backdrop-filter: blur(10px) !important;
+        border-radius: 12px !important;
         border: 1px solid var(--glass-border) !important;
-        box-shadow: var(--shadow-heavy) !important;
+        box-shadow: var(--shadow-medium) !important;
         padding: 2rem !important;
         margin-top: 1rem !important;
         animation: fadeInUp 0.8s ease-out;
@@ -95,293 +72,146 @@ st.markdown("""
     
     /* Header styling */
     .main-header {
-        font-size: 3.5rem !important;
-        font-weight: 800 !important;
-        background: linear-gradient(135deg, var(--accent-peach), var(--dark-peach)) !important;
-        -webkit-background-clip: text !important;
-        -webkit-text-fill-color: transparent !important;
-        background-clip: text !important;
+        font-size: 3rem !important;
+        font-weight: 700 !important;
+        color: var(--accent-nude) !important;
         text-align: center !important;
         margin-bottom: 1rem !important;
-        text-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
-        animation: titleGlow 3s ease-in-out infinite alternate;
-        line-height: 1.1 !important;
-    }
-    
-    @keyframes titleGlow {
-        from { filter: brightness(1) drop-shadow(0 0 5px rgba(212, 81, 19, 0.5)); }
-        to { filter: brightness(1.1) drop-shadow(0 0 20px rgba(212, 81, 19, 0.8)); }
+        letter-spacing: -0.5px;
     }
     
     .subtitle {
         text-align: center;
-        font-size: 1.3rem;
-        font-weight: 500;
+        font-size: 1.2rem;
+        font-weight: 400;
         color: var(--text-dark);
         margin-bottom: 2rem;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        animation: fadeIn 1s ease-out 0.3s both;
+        opacity: 0.9;
     }
     
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-    
-    /* Card styling with enhanced glassmorphism */
+    /* Card styling */
     .glass-card {
-        background: rgba(255, 255, 255, 0.25) !important;
-        backdrop-filter: blur(20px) !important;
-        border-radius: 20px !important;
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        background: var(--text-light) !important;
+        border-radius: 12px !important;
+        border: 1px solid var(--secondary-nude) !important;
         padding: 2rem !important;
         margin-bottom: 2rem !important;
-        box-shadow: var(--shadow-medium) !important;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        position: relative !important;
-        overflow: hidden !important;
-    }
-    
-    .glass-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transition: left 0.6s;
-    }
-    
-    .glass-card:hover::before {
-        left: 100%;
+        box-shadow: var(--shadow-light) !important;
+        transition: all 0.3s ease !important;
     }
     
     .glass-card:hover {
-        transform: translateY(-5px) !important;
-        box-shadow: var(--shadow-heavy) !important;
-        border-color: rgba(255, 255, 255, 0.4) !important;
+        transform: translateY(-3px) !important;
+        box-shadow: var(--shadow-medium) !important;
+        border-color: var(--accent-nude) !important;
     }
     
     /* Input section styling */
     .input-section {
-        background: rgba(255, 255, 255, 0.3) !important;
-        backdrop-filter: blur(25px) !important;
-        border-radius: 25px !important;
-        border: 1px solid rgba(255, 255, 255, 0.4) !important;
-        padding: 2.5rem !important;
+        background: var(--text-light) !important;
+        border-radius: 12px !important;
+        border: 1px solid var(--secondary-nude) !important;
+        padding: 2rem !important;
         margin-bottom: 2rem !important;
-        box-shadow: var(--shadow-medium) !important;
-        transition: all 0.3s ease !important;
-        animation: slideInLeft 0.8s ease-out;
+        box-shadow: var(--shadow-light) !important;
     }
     
-    @keyframes slideInLeft {
-        from { opacity: 0; transform: translateX(-50px); }
-        to { opacity: 1; transform: translateX(0); }
-    }
-    
-    .input-section:hover {
-        background: rgba(255, 255, 255, 0.35) !important;
-        border-color: rgba(255, 255, 255, 0.5) !important;
-    }
-    
-    /* Tagline styling with peach backgrounds */
+    /* Tagline styling */
     .tagline {
         text-align: center !important;
-        font-size: 1.4rem !important;
-        font-weight: 700 !important;
-        color: var(--text-dark) !important;
-        margin: 2rem auto !important;
-        padding: 1rem 2rem !important;
-        border-radius: 50px !important;
-        background: linear-gradient(135deg, var(--primary-peach), var(--light-peach)) !important;
+        font-size: 1.2rem !important;
+        font-weight: 500 !important;
+        color: var(--accent-nude) !important;
+        margin: 1.5rem auto !important;
+        padding: 0.8rem 1.5rem !important;
+        border-radius: 8px !important;
+        background: var(--text-light) !important;
+        border: 1px solid var(--secondary-nude) !important;
         max-width: 500px !important;
-        box-shadow: var(--shadow-medium) !important;
-        transform: translateY(0) !important;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        animation: bounceIn 1s ease-out;
-        position: relative !important;
-        overflow: hidden !important;
-    }
-    
-    @keyframes bounceIn {
-        0% { transform: scale(0.3) translateY(-50px); opacity: 0; }
-        50% { transform: scale(1.05) translateY(-10px); }
-        70% { transform: scale(0.9) translateY(0); }
-        100% { transform: scale(1) translateY(0); opacity: 1; }
-    }
-    
-    .tagline:hover {
-        transform: translateY(-3px) scale(1.02) !important;
-        box-shadow: var(--shadow-heavy) !important;
     }
     
     .dark-tagline {
         text-align: center !important;
-        font-size: 1.4rem !important;
-        font-weight: 700 !important;
-        color: var(--text-dark) !important;
-        margin: 2rem auto !important;
-        padding: 1rem 2rem !important;
-        border-radius: 50px !important;
-        background: linear-gradient(135deg, var(--secondary-peach), var(--dark-peach)) !important;
+        font-size: 1.2rem !important;
+        font-weight: 500 !important;
+        color: var(--text-light) !important;
+        margin: 1.5rem auto !important;
+        padding: 0.8rem 1.5rem !important;
+        border-radius: 8px !important;
+        background: var(--accent-nude) !important;
         max-width: 500px !important;
-        box-shadow: var(--shadow-medium) !important;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        animation: slideInRight 0.8s ease-out;
     }
     
-    @keyframes slideInRight {
-        from { opacity: 0; transform: translateX(50px); }
-        to { opacity: 1; transform: translateX(0); }
-    }
-    
-    .dark-tagline:hover {
-        transform: translateY(-3px) scale(1.02) !important;
-        box-shadow: var(--shadow-heavy) !important;
-    }
-    
-    /* Button styling with peach accents */
+    /* Button styling */
     .stButton > button {
-        background: linear-gradient(135deg, var(--accent-peach), var(--dark-peach)) !important;
-        color: white !important;
-        font-weight: 700 !important;
-        font-size: 1.1rem !important;
-        border-radius: 50px !important;
-        padding: 0.8rem 2.5rem !important;
-        width: 100% !important;
+        background: var(--accent-nude) !important;
+        color: var(--text-light) !important;
+        font-weight: 500 !important;
+        font-size: 1rem !important;
+        border-radius: 8px !important;
+        padding: 0.7rem 1.5rem !important;
         border: none !important;
-        box-shadow: var(--shadow-medium) !important;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        position: relative !important;
-        overflow: hidden !important;
-    }
-    
-    .stButton > button::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transition: left 0.6s;
-    }
-    
-    .stButton > button:hover::before {
-        left: 100%;
+        transition: all 0.3s ease !important;
     }
     
     .stButton > button:hover {
-        transform: translateY(-3px) scale(1.02) !important;
-        box-shadow: var(--shadow-heavy) !important;
-        background: linear-gradient(135deg, var(--dark-peach), var(--accent-peach)) !important;
-    }
-    
-    .stButton > button:active {
-        transform: translateY(-1px) scale(0.98) !important;
-    }
-    
-    /* Download button styling */
-    .stDownloadButton > button {
-        background: linear-gradient(135deg, var(--secondary-peach), var(--accent-peach)) !important;
-        color: white !important;
-        font-weight: 700 !important;
-        border-radius: 50px !important;
-        border: none !important;
+        background: var(--dark-nude) !important;
         box-shadow: var(--shadow-medium) !important;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-    }
-    
-    .stDownloadButton > button:hover {
-        transform: translateY(-3px) scale(1.02) !important;
-        box-shadow: var(--shadow-heavy) !important;
     }
     
     /* Feature box styling */
     .feature-box {
-        background: rgba(255, 255, 255, 0.25) !important;
-        backdrop-filter: blur(15px) !important;
-        border-radius: 20px !important;
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        background: var(--text-light) !important;
+        border-radius: 12px !important;
+        border: 1px solid var(--secondary-nude) !important;
         padding: 1.5rem !important;
         text-align: center !important;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        box-shadow: var(--shadow-light) !important;
+        transition: all 0.3s ease !important;
         height: 100% !important;
-        position: relative !important;
-        overflow: hidden !important;
-    }
-    
-    .feature-box::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(135deg, var(--accent-peach), var(--dark-peach));
-        transform: scaleX(0);
-        transition: transform 0.3s ease;
-    }
-    
-    .feature-box:hover::before {
-        transform: scaleX(1);
     }
     
     .feature-box:hover {
-        transform: translateY(-10px) !important;
-        box-shadow: var(--shadow-heavy) !important;
-        background: rgba(255, 255, 255, 0.3) !important;
+        transform: translateY(-5px) !important;
+        box-shadow: var(--shadow-medium) !important;
+        border-color: var(--accent-nude) !important;
     }
     
     .feature-icon {
-        font-size: 3rem !important;
+        font-size: 2.5rem !important;
         margin-bottom: 1rem !important;
-        animation: float 3s ease-in-out infinite !important;
-    }
-    
-    @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
+        color: var(--accent-nude) !important;
     }
     
     .feature-title {
-        font-weight: 700 !important;
-        font-size: 1.2rem !important;
+        font-weight: 600 !important;
+        font-size: 1.1rem !important;
         color: var(--text-dark) !important;
         margin-bottom: 0.5rem !important;
     }
     
     .feature-description {
         color: var(--text-dark) !important;
-        font-size: 0.95rem !important;
+        font-size: 0.9rem !important;
         line-height: 1.5 !important;
+        opacity: 0.8;
     }
     
     /* Results section styling */
     .results-card {
-        background: rgba(255, 255, 255, 0.25) !important;
-        backdrop-filter: blur(20px) !important;
-        border-radius: 25px !important;
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        background: var(--text-light) !important;
+        border-radius: 12px !important;
+        border: 1px solid var(--secondary-nude) !important;
         padding: 2rem !important;
-        box-shadow: var(--shadow-medium) !important;
-        animation: slideInRight 0.8s ease-out;
+        box-shadow: var(--shadow-light) !important;
         min-height: 400px !important;
     }
     
     .info-label {
-        font-weight: 700 !important;
-        color: var(--accent-peach) !important;
-        font-size: 1.2rem !important;
+        font-weight: 600 !important;
+        color: var(--accent-nude) !important;
+        font-size: 1.1rem !important;
         margin-top: 1.5rem !important;
-        margin-bottom: 1rem !important;
-        padding: 0.5rem 1rem !important;
-        background: rgba(255, 255, 255, 0.2) !important;
-        border-radius: 15px !important;
-        border-left: 4px solid var(--accent-peach) !important;
+        margin-bottom: 0.5rem !important;
     }
     
     /* Text styling */
@@ -393,25 +223,22 @@ st.markdown("""
     .stTextArea > div > div > textarea,
     .stTextInput > div > div > input,
     .stSelectbox > div > div > select {
-        background: rgba(255, 255, 255, 0.3) !important;
+        background: var(--text-light) !important;
         color: var(--text-dark) !important;
-        border: 2px solid rgba(255, 255, 255, 0.4) !important;
-        border-radius: 15px !important;
-        backdrop-filter: blur(10px) !important;
-        transition: all 0.3s ease !important;
+        border: 1px solid var(--secondary-nude) !important;
+        border-radius: 8px !important;
     }
     
     .stTextArea > div > div > textarea:focus,
     .stTextInput > div > div > input:focus,
     .stSelectbox > div > div > select:focus {
-        border-color: var(--accent-peach) !important;
-        box-shadow: 0 0 0 3px rgba(212, 81, 19, 0.1) !important;
-        transform: scale(1.02) !important;
+        border-color: var(--accent-nude) !important;
+        box-shadow: 0 0 0 2px rgba(150, 126, 118, 0.1) !important;
     }
     
     .stTextArea > div > div > textarea::placeholder,
     .stTextInput > div > div > input::placeholder {
-        color: rgba(74, 74, 74, 0.7) !important;
+        color: rgba(61, 59, 64, 0.5) !important;
     }
     
     /* Label styling */
@@ -419,26 +246,19 @@ st.markdown("""
     .stTextInput > label,
     .stSelectbox > label {
         color: var(--text-dark) !important;
-        font-weight: 600 !important;
-        font-size: 1.1rem !important;
+        font-weight: 500 !important;
+        font-size: 1rem !important;
     }
     
     /* Disclaimer styling */
     .disclaimer-box {
-        background: rgba(212, 81, 19, 0.15) !important;
-        backdrop-filter: blur(15px) !important;
-        border: 1px solid rgba(212, 81, 19, 0.3) !important;
-        border-left: 5px solid var(--accent-peach) !important;
-        border-radius: 15px !important;
+        background: rgba(150, 126, 118, 0.1) !important;
+        border: 1px solid var(--secondary-nude) !important;
+        border-left: 4px solid var(--accent-nude) !important;
+        border-radius: 8px !important;
         padding: 1rem !important;
         margin: 1rem 0 !important;
         color: var(--text-dark) !important;
-        animation: slideInDown 0.6s ease-out;
-    }
-    
-    @keyframes slideInDown {
-        from { opacity: 0; transform: translateY(-20px); }
-        to { opacity: 1; transform: translateY(0); }
     }
     
     /* Placeholder content styling */
@@ -449,43 +269,29 @@ st.markdown("""
         align-items: center !important;
         height: 400px !important;
         text-align: center !important;
-        background: rgba(255, 255, 255, 0.2) !important;
-        backdrop-filter: blur(15px) !important;
-        border-radius: 25px !important;
-        border: 2px dashed rgba(255, 255, 255, 0.4) !important;
-        animation: pulse 2s ease-in-out infinite !important;
-    }
-    
-    @keyframes pulse {
-        0%, 100% { opacity: 0.7; transform: scale(1); }
-        50% { opacity: 1; transform: scale(1.02); }
+        background: var(--text-light) !important;
+        border-radius: 12px !important;
+        border: 2px dashed var(--secondary-nude) !important;
     }
     
     .placeholder-icon {
-        font-size: 5rem !important;
+        font-size: 4rem !important;
         margin-bottom: 1rem !important;
-        color: var(--accent-peach) !important;
-        animation: bounce 2s ease-in-out infinite !important;
-    }
-    
-    @keyframes bounce {
-        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-        40% { transform: translateY(-10px); }
-        60% { transform: translateY(-5px); }
+        color: var(--secondary-nude) !important;
     }
     
     .placeholder-title {
-        font-weight: 700 !important;
-        font-size: 1.5rem !important;
+        font-weight: 600 !important;
+        font-size: 1.3rem !important;
         color: var(--text-dark) !important;
         margin-bottom: 0.5rem !important;
     }
     
     .placeholder-description {
         color: var(--text-dark) !important;
-        font-size: 1.1rem !important;
+        font-size: 1rem !important;
         line-height: 1.5 !important;
-        opacity: 0.8;
+        opacity: 0.7;
     }
     
     /* Footer styling */
@@ -493,54 +299,21 @@ st.markdown("""
         text-align: center !important;
         margin-top: 3rem !important;
         padding-top: 2rem !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+        border-top: 1px solid var(--secondary-nude) !important;
         color: var(--text-dark) !important;
-        font-size: 0.9rem !important;
-        animation: fadeIn 1s ease-out 1s both;
-    }
-    
-    /* Loading animation */
-    .stSpinner > div {
-        border-color: var(--accent-peach) rgba(212,81,19,0.1) rgba(212,81,19,0.1) rgba(212,81,19,0.1) !important;
+        font-size: 0.85rem !important;
+        opacity: 0.8;
     }
     
     /* Responsive design */
     @media (max-width: 768px) {
         .main-header {
-            font-size: 2.5rem !important;
-        }
-        
-        .tagline, .dark-tagline {
-            font-size: 1.2rem !important;
-            margin: 1rem auto !important;
+            font-size: 2.2rem !important;
         }
         
         .glass-card, .input-section, .results-card {
             padding: 1.5rem !important;
         }
-        
-        .feature-box {
-            margin-bottom: 1rem !important;
-        }
-    }
-    
-    /* Scrollbar styling */
-    ::-webkit-scrollbar {
-        width: 8px;
-    }
-    
-    ::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-    }
-    
-    ::-webkit-scrollbar-thumb {
-        background: rgba(212, 81, 19, 0.3);
-        border-radius: 10px;
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
-        background: rgba(212, 81, 19, 0.5);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -691,7 +464,7 @@ def create_job_report_pdf(analysis_results, user_profile):
             'Heading',
             parent=styles['Heading2'],
             fontSize=14,
-            textColor=colors.HexColor('#D45113'),  # Using the accent peach color
+            textColor=colors.HexColor('#967E76'),  # Using the accent nude color
             spaceAfter=6
         )
         normal_style = ParagraphStyle(
@@ -858,7 +631,7 @@ def main():
         # Display results if available
         if st.session_state.analysis_results:
             st.markdown('<div class="results-card">', unsafe_allow_html=True)
-            st.markdown('<div style="font-size: 1.8rem; font-weight: 700; color: var(--accent-peach); margin-bottom: 1.5rem; text-align: center;">✨ Your Job Market Analysis</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size: 1.8rem; font-weight: 700; color: var(--accent-nude); margin-bottom: 1.5rem; text-align: center;">✨ Your Job Market Analysis</div>', unsafe_allow_html=True)
             
             # Format the analysis results with better styling
             formatted_info = st.session_state.analysis_results.replace(
@@ -902,7 +675,7 @@ def main():
     # Additional features section
     st.markdown("---")
     st.markdown("""
-    <div style="text-align: center; font-size: 2rem; font-weight: 700; color: var(--accent-peach); margin: 2rem 0;">
+    <div style="text-align: center; font-size: 2rem; font-weight: 700; color: var(--accent-nude); margin: 2rem 0;">
         🚀 What You'll Discover
     </div>
     """, unsafe_allow_html=True)
@@ -949,7 +722,7 @@ def main():
     st.markdown("""
     <div class="footer">
         ✨ Powered by cutting-edge AI technology • Gemini Flash 2 Pro + Tavily • Real-time Job Market Intelligence<br>
-        <strong>© 2025 AI Job Matcher - Your Gateway to Career Success</strong>
+        <strong>©️ 2025 AI Job Matcher - Your Gateway to Career Success</strong>
     </div>
     """, unsafe_allow_html=True)
 
